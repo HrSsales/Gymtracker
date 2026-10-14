@@ -5,48 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - GymTracker</title>
+    <h1>Dashboard</h1>
 
+<h2 id="boasVindas"></h2>
     <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Segoe UI', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        body{
-            background:#121212;
-            color:white;
-            padding:40px;
+        body {
+            background: #121212;
+            color: white;
+            padding: 40px;
         }
 
-        h1{
-            color:#ff6b00;
-            margin-bottom:30px;
+        h1 {
+            color: #ff6b00;
+            margin-bottom: 30px;
+            text-align: center;
         }
 
-        .card{
-            background:#1d1d1d;
-            padding:25px;
-            border-radius:20px;
-            margin-bottom:20px;
+        .acoes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
-        .botao{
-            background:#ff6b00;
-            color:white;
-            border:none;
-            border-radius:30px;
-            padding:12px 20px;
-            cursor:pointer;
-            margin-right:10px;
+        .botao {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            cursor: pointer;
+            min-width: 160px;
         }
 
-        a{
-            text-decoration:none;
+        .botao:hover {
+            background: #ff7f26;
+            transition: 0.3s;
         }
 
+        .card {
+            background: #1d1d1d;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #ff6b00;
+            margin-bottom: 10px;
+        }
+
+        .logout {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
     </style>
 </head>
 
@@ -54,11 +75,11 @@
 
     <h1>Dashboard</h1>
 
-    <button class="botao">Novo Treino</button>
-    <button class="botao">Novo Exercício</button>
-    <button class="botao">Novo Registro</button>
-
-    <br><br>
+    <div class="acoes">
+        <button class="botao">Novo Treino</button>
+        <button class="botao">Novo Exercício</button>
+        <button class="botao">Novo Registro</button>
+    </div>
 
     <div class="card">
         <h2>Treinos</h2>
@@ -75,12 +96,26 @@
         <p>Área para CRUD de histórico.</p>
     </div>
 
-    index.html
-        <button class="botao">
-            Sair
-        </button>
-    </a>
+    <div class="logout">
+        <button class="botao" onclick="sair()">
+    Sair
+</button>
+    </div>
+    <script>
 
+    let usuario = localStorage.getItem("usuarioLogado");
+
+    document.getElementById("boasVindas").innerText =
+        "Bem-vindo, " + usuario + "!";
+
+    function sair() {
+
+        localStorage.removeItem("usuarioLogado");
+
+        window.location.href = "index.html";
+
+    }
+</script>
 </body>
 
 </html>
