@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GymTracker</title>
+
+    <style>
+        /* =========================
+           GERAL
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #121212;
+            color: white;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: #121212;
+            height: 100px;
+            border-bottom: 2px solid #ff6b00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .logo {
+            position: relative;
+            color: #ff6b00;
+            text-decoration: none;
+            font-size: 34px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            animation: respirar 3s infinite ease-in-out;
+            transition: .3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes respirar {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
+            }
+
+            50% {
+                text-shadow: 0 0 20px rgba(255, 107, 0, .8);
+            }
+
+            100% {
+                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
+            }
+        }
+
+        nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .menu-btn {
+            background: #1d1d1d;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .menu-btn:hover {
+            background: #2b2b2b;
+            transform: translateY(-2px);
+        }
+
+        .perfil-btn {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: .3s;
+            font-size: 15px;
+        }
+
+        .perfil-btn:hover {
+            background: #ff7f26;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           CONTEÚDO
+        ========================= */
+
+        main {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        h1 {
+            font-size: 72px;
+            margin-bottom: 30px;
+        }
+
+        h1 span {
+            color: #ff6b00;
+        }
+
+        .subtitulo {
+            max-width: 1000px;
+            margin: 0 auto 80px auto;
+            font-size: 30px;
+            line-height: 1.6;
+            color: #d6d6d6;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .card {
+            width: 350px;
+            background: #1d1d1d;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            padding: 30px;
+            text-align: left;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card h2 {
+            color: #ff6b00;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .card:hover h2 {
+            transform: translateX(5px);
+        }
+
+        .resumo {
+            color: #d6d6d6;
+            line-height: 1.5;
+        }
+
+        .detalhes {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            margin-top: 0;
+            color: #c7c7c7;
+            line-height: 1.6;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #ff6b00;
+            background: #252525;
+            box-shadow:
+                0 0 20px rgba(255, 107, 0, 0.3),
+                0 0 40px rgba(255, 107, 0, 0.1);
+        }
+
+        .card:hover .detalhes {
+            max-height: 250px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            nav {
+                position: static;
+                transform: none;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                height: auto;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            h1 {
+                font-size: 42px;
+            }
+
+            .subtitulo {
+                font-size: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <a href="dashboard.html" class="logo">
+            GYMTRACKER
+        </a>
+
+        <nav>
+            <button class="menu-btn"
+                onclick="window.location.href='treinos.html'">
+                Treinos
+            </button>
+
+            <button class="menu-btn"
+                onclick="window.location.href='exercicios.html'">
+                Exercícios
+            </button>
+
+            <button class="menu-btn"
+                onclick="window.location.href='evolucao.html'">
+                Evolução
+            </button>
+        </nav>
+
+        <button class="perfil-btn"
+            onclick="window.location.href='perfil.html'">
+
+            👤 <span id="boasVindas"></span>
+
+        </button>
+
+    </header>
+
+    <main>
+
+        <h1>
+            Evolua com o <span>GymTracker</span>
+        </h1>
+
+        <p class="subtitulo">
+            Organize seus treinos, registre cargas, acompanhe sua evolução
+            e tenha total controle da sua jornada fitness em uma única plataforma.
+        </p>
+
+        <div class="cards">
+
+            <div class="card"
+                onclick="window.location.href='treinos.html'">
+
+                <h2>📋 Treinos</h2>
+
+                <p class="resumo">
+                    Organize seus treinos.
+                </p>
+
+                <div class="detalhes">
+                    Crie fichas personalizadas para cada grupo muscular,
+                    monte divisões ABC, Upper/Lower ou Push Pull Legs
+                    e mantenha toda sua rotina organizada.
+                </div>
+
+            </div>
+
+            <div class="card"
+                onclick="window.location.href='exercicios.html'">
+
+                <h2>🏋 Exercícios</h2>
+
+                <p class="resumo">
+                    Sua ficha fácil e rápida.
+                </p>
+
+                <div class="detalhes">
+                    Cadastre exercícios, séries, repetições e observações.
+                    Tenha tudo centralizado para construir treinos completos.
+                </div>
+
+            </div>
+
+            <div class="card"
+                onclick="window.location.href='evolucao.html'">
+
+                <h2>📈 Evolução</h2>
+
+                <p class="resumo">
+                    Acompanhe sua evolução.
+                </p>
+
+                <div class="detalhes">

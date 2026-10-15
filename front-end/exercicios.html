@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - GymTracker</title>
+
+    <style>
+        /* =========================
+           GERAL
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #121212;
+            color: white;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: #121212;
+            height: 100px;
+            border-bottom: 2px solid #ff6b00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .logo {
+            position: relative;
+            color: #ff6b00;
+            text-decoration: none;
+            font-size: 34px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            animation: respirar 3s infinite ease-in-out;
+            transition: .3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes respirar {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
+            }
+
+            50% {
+                text-shadow: 0 0 20px rgba(255, 107, 0, .8);
+            }
+
+            100% {
+                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
+            }
+        }
+
+        nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .menu-btn {
+            background: #1d1d1d;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 25px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .menu-btn:hover {
+            background: #252525;
+            color: #ff6b00;
+            transform: translateY(-2px);
+        }
+
+        .perfil-btn {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: .3s;
+            font-size: 15px;
+        }
+
+        .perfil-btn:hover {
+            background: #ff7f26;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           CONTEÚDO
+        ========================= */
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 72px;
+            margin-bottom: 25px;
+        }
+
+        .page-title span {
+            color: #ff6b00;
+        }
+
+        .descricao {
+            text-align: center;
+            font-size: 28px;
+            color: #d6d6d6;
+            max-width: 900px;
+            margin: 0 auto 70px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           BOTÃO NOVO EXERCÍCIO
+        ========================= */
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .create-btn {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 16px 35px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .create-btn:hover {
+            background: #ff7f26;
+            transform: scale(1.05);
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .exercicios-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .exercicio-card {
+            width: 380px;
+            background: #1d1d1d;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            padding: 30px;
+            transition: all .3s ease;
+        }
+
+        .exercicio-card:hover {
+            transform: translateY(-8px);
+            border-color: #ff6b00;
+            background: #252525;
+            box-shadow:
+                0 0 20px rgba(255, 107, 0, .3),
+                0 0 40px rgba(255, 107, 0, .1);
+        }
+
+        .exercicio-card h2 {
+            color: #ff6b00;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .exercicio-card p {
+            color: #d6d6d6;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn-editar,
+        .btn-excluir {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: .3s;
+            font-size: 15px;
+        }
+
+        .btn-editar {
+            background: transparent;
+            color: white;
+            border: 1px solid #ff6b00;
+        }
+
+        .btn-editar:hover {
+            background: #ff6b00;
+            transform: translateY(-2px);
+        }
+
+        .btn-excluir {
+            background: transparent;
+            color: white;
+            border: 1px solid #d32f2f;
+        }
+
+        .btn-excluir:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           RESPONSIVO
+        ========================= */
+
+        @media (max-width: 1200px) {
+
+            header {
+                flex-direction: column;
+                height: auto;
+                padding: 20px;
+                gap: 15px;
+            }
+
+            nav {
+                position: static;
+                transform: none;
+            }
+
+            .page-title {
+                font-size: 56px;
+            }
+
+            .descricao {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .page-title {
+                font-size: 42px;
+            }
+
+            .descricao {
+                font-size: 18px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .exercicio-card {
+                width: 100%;
+                max-width: 420px;
+            }
+
+            .acoes {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <a href="dashboard.html" class="logo">
+            GYMTRACKER
+        </a>
+
+        <nav>
+
+            <button class="menu-btn"
+                onclick="window.location.href='treinos.html'">
+                Treinos
+            </button>
+
+            <button class="menu-btn"
+                onclick="window.location.href='exercicios.html'">
+                Exercícios
+            </button>
+
+            <button class="menu-btn"
+                onclick="window.location.href='evolucao.html'">
+                Evolução
+            </button>
+
+        </nav>
+
+        <button class="perfil-btn"
+            onclick="window.location.href='perfil.html'">
+
+            👤 Perfil
+
+        </button>
+
+    </header>
+
+    <main>
+
+        <h1 class="page-title">
+            Meus <span>Exercícios</span>
+        </h1>
+
+        <p class="descricao">
+            Cadastre, organize e gerencie todos os exercícios utilizados
+            nos seus treinos para construir fichas completas e acompanhar
+            sua evolução de forma eficiente.
+        </p>
+
+        <div class="actions">
+
+            <button class="create-btn">
+                + Novo Exercício
+            </button>
+
+        </div>
+
+        <div class="exercicios-grid">
+
+            <div class="exercicio-card">
+
+                <h2>Supino Inclinado</h2>
+
+                <p>
+                    Grupo muscular: Peito<br>
+                    Equipamento: Banco Inclinado + Barra
+                </p>
+
+                <div class="acoes">
+
+                    <button class="btn-editar">
+                        Editar
+                    </button>
+
+                    <button class="btn-excluir">
+                        Excluir
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="exercicio-card">
+
+                <h2>Puxada Frontal</h2>
+
+                <p>
+                    Grupo muscular: Costas<br>
+                    Equipamento: Polia Alta
+                </p>
+
+                <div class="acoes">
+
+                    <button class="btn-editar">
+                        Editar
+                    </button>
+
+                    <button class="btn-excluir">
+                        Excluir
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="exercicio-card">
+
+                <h2>Elevação Lateral</h2>
+
+                <p>
+                    Grupo muscular: Ombros<br>
+                    Equipamento: Halteres
+                </p>
+
+                <div class="acoes">
+
+                    <button class="btn-editar">
+                        Editar
+                    </button>
+
+                    <button class="btn-excluir">
+                        Excluir
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
