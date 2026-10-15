@@ -14,9 +14,9 @@
 
     <nav>
 
-        <div class="logo">
-            GYMTRACKER
-        </div>
+        <a href="index.html" class="logo">
+    GYMTRACKER
+</a>
 
         <div class="menu-navegacao">
 
@@ -51,9 +51,12 @@
             da sua jornada fitness em uma única plataforma.
         </p>
 
-        <button class="botao-comecar">
-            Começar Agora
-        </button>
+        <button class="botao-comecar"
+onclick="window.location.href='login.html'">
+    Começar Agora
+</button>
+
+    
 
     </section>
 
@@ -119,11 +122,12 @@
             padding: 20px 50px;
         }
 
-        .logo {
-            font-size: 30px;
-            font-weight: bold;
-            color: #ff6b00;
-        }
+       .logo{
+    color:#ff6b00;
+    text-decoration:none;
+    font-size:42px;
+    font-weight:bold;
+}
 
         /* MENU CENTRAL */
 
@@ -224,21 +228,16 @@
             margin-bottom: 40px;
         }
 
-        .botao-comecar {
-            background-color: #ff6b00;
-            color: white;
+        .botao-comecar{
+    background:#ff6b00;
+    color:white;
+    border:none;
+    border-radius:30px;
+    padding:15px 40px;
+    font-size:18px;
+    cursor:pointer;
+}
 
-            border: none;
-            border-radius: 40px;
-
-            padding: 18px 40px;
-
-            font-size: 18px;
-            font-weight: bold;
-
-            cursor: pointer;
-            transition: 0.3s;
-        }
 
         .botao-comecar:hover {
             transform: scale(1.05);

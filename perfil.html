@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - GymTracker</title>
+</head>
+
+<body>
+
+    <header>
+
+        <a href="dashboard.html" class="logo">
+            GYMTRACKER
+        </a>
+
+        <nav>
+            <button class="menu-btn"
+                onclick="window.location.href='dashboard.html'">
+                Dashboard
+            </button>
+
+            <button class="menu-btn">
+                Sobre-nos
+            </button>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <div class="perfil-card">
+
+            <h1>Meu Perfil</h1>
+
+            <div class="informacao">
+
+                <label>Nome</label>
+
+                <div class="campo" id="nomeUsuario">
+                    Carregando...
+                </div>
+
+            </div>
+
+            <div class="informacao">
+
+                <label>Email</label>
+
+                <div class="campo" id="emailUsuario">
+                    Carregando...
+                </div>
+
+            </div>
+
+            <div class="acoes">
+
+                <button class="botao">
+                    Editar Perfil
+                </button>
+
+                <button class="botao">
+                    Alterar Senha
+                </button>
+
+            </div>
+
+            <div class="acoes">
+
+                <button class="botao-secundario"
+                    onclick="window.location.href='dashboard.html'">
+                    Voltar
+                </button>
+
+                <button class="botao-sair"
+                    onclick="sair()">
+                    Sair
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+
+        let usuario = JSON.parse(
+            localStorage.getItem("usuario")
+        );
+
+        if (usuario) {
+
+            document.getElementById("nomeUsuario")
+                .innerText = usuario.nome;
+
+            document.getElementById("emailUsuario")
+                .innerText = usuario.email;
+
+        }
+
+        function sair() {
+
+            localStorage.removeItem("usuarioLogado");
+
+            window.location.href = "index.html";
+
+        }
+
+    </script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #121212;
+            color: white;
+        }
+
+        header {
+            height: 100px;
+            border-bottom: 2px solid #ff6b00;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 0 50px;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: #ff6b00;
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .menu-btn {
+            background: #1d1d1d;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 25px;
+            cursor: pointer;
+        }
+
+        .menu-btn:hover {
+            background: #2b2b2b;
+            transition: 0.3s;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            padding-top: 80px;
+        }
+
+        .perfil-card {
+            width: 600px;
+            background: #1d1d1d;
+            padding: 40px;
+            border-radius: 25px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b00;
+            margin-bottom: 40px;
+        }
+
+        .informacao {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ff6b00;
+            font-weight: bold;
+        }
+
+        .campo {
+            background: #2b2b2b;
+            padding: 14px;
+            border-radius: 10px;
+        }
+
+        .acoes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .botao {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .botao-secundario {
+            background: #2b2b2b;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .botao-sair {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .botao:hover,
+        .botao-secundario:hover,
+        .botao-sair:hover {
+            opacity: 0.9;
+            transition: 0.3s;
+        }
+
+    </style>
+
+</body>
+
+</html>
