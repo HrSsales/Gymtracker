@@ -36,29 +36,56 @@
         </div>
     </div>
 <script>
-    function login() {
+async function login() {
 
-        let email = document.getElementById("email").value;
-        let senha = document.getElementById("senha").value;
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
 
-        let usuario = JSON.parse(localStorage.getItem("usuario"));
+    try {
 
-        if (!usuario) {
-            alert("Nenhum usuário cadastrado!");
+        const resposta = await fetch(
+            "http://localhost:3000/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    senha
+                })
+            }
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            alert(dados.erro);
             return;
         }
 
-        if (email === usuario.email && senha === usuario.senha) {
+        localStorage.setItem(
+            "usuarioLogado",
+            dados.usuario.nome
+        );
 
-            localStorage.setItem("usuarioLogado", usuario.nome);
+        localStorage.setItem(
+            "usuarioId",
+            dados.usuario.id
+        );
 
-            window.location.href = "dashboard.html";
-        }
-        else {
-            alert("Email ou senha inválidos!");
-        }
+        window.location.href = "dashboard.html";
 
+    } catch (erro) {
+
+        console.error(erro);
+
+        alert(
+            "Erro ao conectar com o servidor."
+        );
     }
+
+}
 </script>
 
 <style>

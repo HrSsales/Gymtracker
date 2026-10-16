@@ -348,39 +348,152 @@
 
         <div class="actions">
 
-            <button class="create-btn">
-                + Novo Treino
-            </button>
-
+            <button
+    class="create-btn"
+    onclick="novoTreino()"
+>
+    + Novo Treino
+</button>
         </div>
 
-        <div class="treinos-grid">
+        <div
+    class="treinos-grid"
+    id="treinosGrid"
+>
 
-            <div class="treino-card">
+</div>
 
-                <h2>Upper</h2>
 
-                <p>
-                    Treino focado em peito, costas, ombros, bíceps e tríceps.
-                </p>
-
-                <div class="acoes">
-
-                    <button class="btn-editar">
-                        Editar
-                    </button>
-
-                    <button class="btn-excluir">
-                        Excluir
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
 
     </main>
+
+
+    <script>
+
+async function carregarTreinos() {
+
+    const usuarioId =
+        localStorage.getItem("usuarioId");
+
+    try {
+
+        const resposta = await fetch(
+            `http://localhost:3000/treinos/${usuarioId}`
+        );
+
+        const treinos =
+            await resposta.json();
+
+        const grid =
+            document.getElementById(
+                "treinosGrid"
+            );
+
+        grid.innerHTML = "";
+
+        if (treinos.length === 0) {
+
+            grid.innerHTML = `
+                <p>
+                    Nenhum treino cadastrado.
+                </p>
+            `;
+
+            return;
+        }
+
+        treinos.forEach(treino => {
+
+            grid.innerHTML += `
+                <div class="treino-card">
+
+                    <h2>${treino.nome}</h2>
+
+                    <p>
+                        ${treino.descricao}
+                    </p>
+
+                    <div class="acoes">
+
+                        <button
+                            class="btn-editar"
+                        >
+                            Editar
+                        </button>
+
+                        <button
+                            class="btn-excluir"
+                        >
+                            Excluir
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+}
+async function novoTreino() {
+
+    const nome =
+        prompt("Nome do treino:");
+
+    if (!nome) return;
+
+    const descricao =
+        prompt("Descrição do treino:");
+
+    const usuario_id =
+        localStorage.getItem("usuarioId");
+
+    try {
+
+        const resposta = await fetch(
+            "http://localhost:3000/treinos",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+                body: JSON.stringify({
+                    nome,
+                    descricao,
+                    usuario_id
+                })
+            }
+        );
+
+        if (!resposta.ok) {
+
+            alert(
+                "Erro ao criar treino."
+            );
+
+            return;
+        }
+
+        carregarTreinos();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+}
+carregarTreinos();
+
+</script>
+
 
 </body>
 

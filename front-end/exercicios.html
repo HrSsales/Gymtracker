@@ -334,100 +334,193 @@
 
     </header>
 
-    <main>
+<main>
 
-        <h1 class="page-title">
-            Meus <span>Exercícios</span>
-        </h1>
+    <h1 class="page-title">
+        Meus <span>Exercícios</span>
+    </h1>
 
-        <p class="descricao">
-            Cadastre, organize e gerencie todos os exercícios utilizados
-            nos seus treinos para construir fichas completas e acompanhar
-            sua evolução de forma eficiente.
-        </p>
+    <p class="descricao">
+        Cadastre e organize todos os exercícios dos seus treinos.
+    </p>
 
-        <div class="actions">
+    <div class="actions">
+        <button
+            class="create-btn"
+            id="novoExercicio">
 
-            <button class="create-btn">
-                + Novo Exercício
-            </button>
+            + Novo Exercício
+        </button>
+    </div>
 
-        </div>
+    <div
+        class="exercicios-grid"
+        id="listaExercicios">
+    </div>
 
-        <div class="exercicios-grid">
+</main>
 
-            <div class="exercicio-card">
+<script>
 
-                <h2>Supino Inclinado</h2>
+const usuarioId = localStorage.getItem("usuarioId");
 
-                <p>
-                    Grupo muscular: Peito<br>
-                    Equipamento: Banco Inclinado + Barra
-                </p>
+const listaExercicios =
+    document.getElementById("listaExercicios");
 
-                <div class="acoes">
+async function carregarExercicios() {
 
-                    <button class="btn-editar">
-                        Editar
-                    </button>
+    try {
 
-                    <button class="btn-excluir">
-                        Excluir
-                    </button>
+        const resposta =
+            await fetch(
+                `http://localhost:3000/exercicios/${usuarioId}`
+            );
+
+        const exercicios =
+            await resposta.json();
+
+        listaExercicios.innerHTML = "";
+
+        if (exercicios.length === 0) {
+
+            listaExercicios.innerHTML = `
+                <div class="exercicio-card">
+                    <h2>Nenhum exercício cadastrado</h2>
+                    <p>
+                        Clique em Novo Exercício.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+        exercicios.forEach(exercicio => {
+
+            listaExercicios.innerHTML += `
+
+                <div class="exercicio-card">
+
+                    <h2>${exercicio.nome}</h2>
+
+                    <p>
+                        <strong>Treino:</strong>
+                        ${exercicio.treino_nome}
+                        <br><br>
+
+                        <strong>Grupo:</strong>
+                        ${exercicio.grupo_muscular}
+                        <br>
+
+                        <strong>Séries:</strong>
+                        ${exercicio.series}
+                        <br>
+
+                        <strong>Repetições:</strong>
+                        ${exercicio.repeticoes}
+                    </p>
+
+                    <div class="acoes">
+
+                        <button class="btn-editar">
+                            Editar
+                        </button>
+
+                        <button class="btn-excluir">
+                            Excluir
+                        </button>
+
+                    </div>
 
                 </div>
 
-            </div>
+            `;
 
-            <div class="exercicio-card">
+        });
 
-                <h2>Puxada Frontal</h2>
+    } catch (erro) {
 
-                <p>
-                    Grupo muscular: Costas<br>
-                    Equipamento: Polia Alta
-                </p>
+        console.error(erro);
 
-                <div class="acoes">
+    }
 
-                    <button class="btn-editar">
-                        Editar
-                    </button>
+}
 
-                    <button class="btn-excluir">
-                        Excluir
-                    </button>
+document
+.getElementById("novoExercicio")
+.addEventListener("click", async () => {
 
-                </div>
+    try {
 
-            </div>
+        const treinoId = prompt(
+            "ID do treino:"
+        );
 
-            <div class="exercicio-card">
+        if (!treinoId) return;
 
-                <h2>Elevação Lateral</h2>
+        const nome = prompt(
+            "Nome do exercício:"
+        );
 
-                <p>
-                    Grupo muscular: Ombros<br>
-                    Equipamento: Halteres
-                </p>
+        if (!nome) return;
 
-                <div class="acoes">
+        const grupo_muscular = prompt(
+            "Grupo muscular:"
+        );
 
-                    <button class="btn-editar">
-                        Editar
-                    </button>
+        if (!grupo_muscular) return;
 
-                    <button class="btn-excluir">
-                        Excluir
-                    </button>
+        const series = prompt(
+            "Quantidade de séries:"
+        );
 
-                </div>
+        if (!series) return;
 
-            </div>
+        const repeticoes = prompt(
+            "Quantidade de repetições:"
+        );
 
-        </div>
+        if (!repeticoes) return;
 
-    </main>
+        const resposta =
+            await fetch(
+                "http://localhost:3000/exercicios",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                        "application/json"
+                    },
+                    body: JSON.stringify({
+
+                        nome,
+                        grupo_muscular,
+                        series: parseInt(series),
+                        repeticoes: parseInt(repeticoes),
+                        treino_id: parseInt(treinoId)
+
+                    })
+                }
+            );
+
+        const resultado =
+            await resposta.json();
+
+        console.log(resultado);
+
+        carregarExercicios();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+});
+
+carregarExercicios();
+
+</script>
 
 </body>
 

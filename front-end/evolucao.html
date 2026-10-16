@@ -336,100 +336,201 @@
 
     <main>
 
-        <h1 class="page-title">
-            Minha <span>Evolução</span>
-        </h1>
+    <h1 class="page-title">
+        Minha <span>Evolução</span>
+    </h1>
 
-        <p class="descricao">
-            Acompanhe sua progressão, registre cargas e visualize sua evolução
-            nos exercícios ao longo da sua jornada fitness.
-        </p>
+    <p class="descricao">
+        Acompanhe sua progressão, registre cargas e visualize sua evolução
+        nos exercícios ao longo da sua jornada fitness.
+    </p>
 
-        <div class="actions">
+    <div class="actions">
 
-            <button class="create-btn">
-                + Novo Registro
-            </button>
+        <button
+            class="create-btn"
+            id="novoRegistro">
 
-        </div>
+            + Novo Registro
 
-        <div class="evolucao-grid">
+        </button>
 
-            <div class="evolucao-card">
+    </div>
 
-                <h2>Supino Inclinado</h2>
+    <div
+        class="evolucao-grid"
+        id="listaEvolucao">
 
-                <p>
-                    📅 Data: 15/10/2026<br>
-                    🏋️ Carga: 30kg<br>
-                    🔁 Repetições: 10
-                </p>
+    </div>
 
-                <div class="acoes">
+</main>
 
-                    <button class="btn-editar">
-                        Editar
-                    </button>
+<script>
 
-                    <button class="btn-excluir">
-                        Excluir
-                    </button>
+const usuarioId = localStorage.getItem("usuarioId");
 
-                </div>
+const listaEvolucao =
+    document.getElementById("listaEvolucao");
 
-            </div>
+async function carregarEvolucao() {
 
-            <div class="evolucao-card">
+    try {
 
-                <h2>Agachamento Livre</h2>
+        const resposta = await fetch(
+            `http://localhost:3000/evolucao/${usuarioId}`
+        );
 
-                <p>
-                    📅 Data: 15/10/2026<br>
-                    🏋️ Carga: 80kg<br>
-                    🔁 Repetições: 8
-                </p>
+        const registros = await resposta.json();
 
-                <div class="acoes">
+        listaEvolucao.innerHTML = "";
 
-                    <button class="btn-editar">
-                        Editar
-                    </button>
+        if (registros.length === 0) {
 
-                    <button class="btn-excluir">
-                        Excluir
-                    </button>
+            listaEvolucao.innerHTML = `
 
-                </div>
+                <div class="evolucao-card">
 
-            </div>
+                    <h2>
+                        Nenhum registro encontrado
+                    </h2>
 
-            <div class="evolucao-card">
-
-                <h2>Puxada Frontal</h2>
-
-                <p>
-                    📅 Data: 15/10/2026<br>
-                    🏋️ Carga: 60kg<br>
-                    🔁 Repetições: 12
-                </p>
-
-                <div class="acoes">
-
-                    <button class="btn-editar">
-                        Editar
-                    </button>
-
-                    <button class="btn-excluir">
-                        Excluir
-                    </button>
+                    <p>
+                        Clique em
+                        "Novo Registro"
+                        para começar.
+                    </p>
 
                 </div>
 
-            </div>
+            `;
 
-        </div>
+            return;
 
-    </main>
+        }
+
+        registros.forEach(registro => {
+
+            listaEvolucao.innerHTML += `
+
+                <div class="evolucao-card">
+
+                    <h2>
+                        ${registro.exercicio_nome}
+                    </h2>
+
+                    <p>
+
+                        📅 Data:
+                        ${new Date(
+                            registro.data_registro
+                        ).toLocaleDateString("pt-BR")}
+
+                        <br><br>
+
+                        ⚖️ Peso:
+                        ${registro.peso} kg
+
+                        <br><br>
+
+                        📝 Observação:
+                        ${registro.observacao || "Sem observação"}
+
+                    </p>
+
+                    <div class="acoes">
+
+                        <button class="btn-editar">
+                            Editar
+                        </button>
+
+                        <button class="btn-excluir">
+                            Excluir
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar evolução:",
+            erro
+        );
+
+    }
+
+}
+
+document
+.getElementById("novoRegistro")
+.addEventListener("click", async () => {
+
+    try {
+
+        const exercicio_id = prompt(
+            "ID do exercício:"
+        );
+
+        if (!exercicio_id) return;
+
+        const peso = prompt(
+            "Peso utilizado (kg):"
+        );
+
+        if (!peso) return;
+
+        const data_registro = prompt(
+            "Data (AAAA-MM-DD):"
+        );
+
+        if (!data_registro) return;
+
+        const observacao = prompt(
+            "Observação:"
+        );
+
+        await fetch(
+            "http://localhost:3000/evolucao",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+                body: JSON.stringify({
+
+                    peso: parseFloat(peso),
+                    data_registro,
+                    observacao,
+                    exercicio_id: parseInt(
+                        exercicio_id
+                    )
+
+                })
+            }
+        );
+
+        carregarEvolucao();
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao salvar evolução:",
+            erro
+        );
+
+    }
+
+});
+
+carregarEvolucao();
+
+</script>
 
 </body>
 

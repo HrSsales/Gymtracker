@@ -381,109 +381,187 @@
 
     <main>
 
-        <section class="perfil-topo">
+       <section class="perfil-topo">
 
-            <div class="avatar">
-                👤
-            </div>
+    <div class="avatar">
+        👤
+    </div>
 
-            <h1 class="nome" id="nomeUsuario">
-                Henrique Sales
-            </h1>
+    <h1 class="nome" id="nomeUsuario">
+        Carregando...
+    </h1>
 
-            <p class="email" id="emailUsuario">
-                henrique@email.com
-            </p>
+    <p class="email" id="emailUsuario">
+        Carregando...
+    </p>
 
-        </section>
+    <p class="membro-desde" id="dataCadastro">
+        Membro desde: --
+    </p>
+
+</section>
 
         <section class="stats">
 
             <div class="stat-card">
+    <h3>Treinos</h3>
+    <span id="qtdTreinos">0</span>
+</div>
 
-                <h3>Treinos</h3>
+<div class="stat-card">
+    <h3>Exercícios</h3>
+    <span id="qtdExercicios">0</span>
+</div>
 
-                <span>4</span>
-
-            </div>
-
-            <div class="stat-card">
-
-                <h3>Exercícios</h3>
-
-                <span>28</span>
-
-            </div>
-
-            <div class="stat-card">
-
-                <h3>Evoluções</h3>
-
-                <span>12</span>
-
-            </div>
-
+<div class="stat-card">
+    <h3>Evoluções</h3>
+    <span id="qtdEvolucoes">0</span>
+</div>
         </section>
 
         <section class="perfil-card">
 
-            <h2>Informações da Conta</h2>
+    <h2>Informações da Conta</h2>
 
-            <div class="campo">
+    <div class="campo">
+        <label>Nome</label>
+        <input
+            type="text"
+            id="inputNome"
+            readonly
+        >
+    </div>
 
-                <label>Nome</label>
+    <div class="campo">
+        <label>Email</label>
+        <input
+            type="email"
+            id="inputEmail"
+            readonly
+        >
+    </div>
 
-                <input type="text" value="Henrique Sales">
+    <div class="campo">
+        <label>Senha</label>
+        <input
+            type="password"
+            value="********"
+            readonly
+        >
+    </div>
 
-            </div>
+    <div class="botoes">
 
-            <div class="campo">
+        <button class="salvar-btn">
+            Editar Perfil
+        </button>
 
-                <label>Email</label>
+        <button
+            class="logout-btn"
+            onclick="sair()"
+        >
+            Sair da Conta
+        </button>
 
-                <input type="email" value="henrique@email.com">
+    </div>
 
-            </div>
-
-            <div class="campo">
-
-                <label>Senha</label>
-
-                <input type="password" value="123456">
-
-            </div>
-
-            <div class="botoes">
-
-                <button class="salvar-btn">
-                    Salvar Alterações
-                </button>
-
-                <button
-                    class="logout-btn"
-                    onclick="sair()">
-
-                    Sair da Conta
-
-                </button>
-
-            </div>
-
-        </section>
+</section>
 
     </main>
 
-    <script>
+<script>
 
-        function sair(){
+async function carregarPerfil() {
 
-            localStorage.removeItem("usuarioLogado");
+    const usuarioId = localStorage.getItem("usuarioId");
 
-            window.location.href="index.html";
+    if (!usuarioId) {
+        window.location.href = "login.html";
+        return;
+    }
 
-        }
+    try {
 
-    </script>
+        const resposta = await fetch(
+            `http://localhost:3000/perfil/${usuarioId}`
+        );
+
+        const usuario = await resposta.json();
+
+        document.getElementById("nomeUsuario").textContent =
+            usuario.nome;
+
+        document.getElementById("emailUsuario").textContent =
+            usuario.email;
+
+        document.getElementById("inputNome").value =
+            usuario.nome;
+
+        document.getElementById("inputEmail").value =
+            usuario.email;
+
+        const data = new Date(usuario.created_at);
+
+        document.getElementById("dataCadastro").textContent =
+            "Membro desde: " +
+            data.toLocaleDateString("pt-BR");
+
+    } catch (erro) {
+
+        console.error("Erro ao carregar perfil:", erro);
+
+    }
+
+}
+
+async function carregarEstatisticas() {
+
+    const usuarioId = localStorage.getItem("usuarioId");
+
+    try {
+
+        const resposta = await fetch(
+            `http://localhost:3000/stats/${usuarioId}`
+        );
+
+        const stats = await resposta.json();
+
+        console.log("Stats recebidas:", stats);
+
+        document.getElementById("qtdTreinos").textContent =
+            stats.treinos || 0;
+
+        document.getElementById("qtdExercicios").textContent =
+            stats.exercicios || 0;
+
+        document.getElementById("qtdEvolucoes").textContent =
+            stats.evolucoes || 0;
+
+    } catch (erro) {
+
+        console.error("Erro ao carregar estatísticas:", erro);
+
+        document.getElementById("qtdTreinos").textContent = 0;
+        document.getElementById("qtdExercicios").textContent = 0;
+        document.getElementById("qtdEvolucoes").textContent = 0;
+
+    }
+
+}
+
+function sair() {
+
+    localStorage.removeItem("usuarioLogado");
+    localStorage.removeItem("usuarioId");
+
+    window.location.href = "index.html";
+
+}
+
+carregarPerfil();
+carregarEstatisticas();
+
+</script>
 
 </body>
 

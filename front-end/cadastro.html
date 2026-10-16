@@ -41,30 +41,60 @@
         </div>
     </div>
     <script>
-    function cadastrar() {
+async function cadastrar() {
 
-        let nome = document.getElementById("nome").value;
-        let email = document.getElementById("email").value;
-        let senha = document.getElementById("senha").value;
-        let confirmarSenha = document.getElementById("confirmarSenha").value;
+    let nome = document.getElementById("nome").value;
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
+    let confirmarSenha = document.getElementById("confirmarSenha").value;
 
-        if (senha !== confirmarSenha) {
-            alert("As senhas não coincidem!");
+    if (!nome || !email || !senha) {
+        alert("Preencha todos os campos.");
+        return;
+    }
+
+    if (senha !== confirmarSenha) {
+        alert("As senhas não coincidem!");
+        return;
+    }
+
+    try {
+
+        const resposta = await fetch(
+            "http://localhost:3000/usuarios",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nome,
+                    email,
+                    senha
+                })
+            }
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            alert(dados.erro || "Erro ao cadastrar.");
             return;
         }
-
-        let usuario = {
-            nome: nome,
-            email: email,
-            senha: senha
-        };
-
-        localStorage.setItem("usuario", JSON.stringify(usuario));
 
         alert("Cadastro realizado com sucesso!");
 
         window.location.href = "login.html";
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        alert(
+            "Não foi possível conectar com o servidor."
+        );
     }
+}
 </script>
 
 
