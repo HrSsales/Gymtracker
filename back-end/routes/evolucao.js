@@ -8,31 +8,18 @@ router.get("/:usuarioId", async (req, res) => {
 
     try {
 
-        const { usuarioId } = req.params;
-
-        const resultado = await pool.query(
-            `
+        const resultado = await pool.query(`
             SELECT
                 evolucao.id,
                 evolucao.peso,
                 evolucao.data_registro,
                 evolucao.observacao,
                 exercicios.nome AS exercicio_nome
-
             FROM evolucao
-
             INNER JOIN exercicios
                 ON evolucao.exercicio_id = exercicios.id
-
-            INNER JOIN treinos
-                ON exercicios.treino_id = treinos.id
-
-            WHERE treinos.usuario_id = $1
-
             ORDER BY evolucao.data_registro DESC
-            `,
-            [usuarioId]
-        );
+        `);
 
         res.json(resultado.rows);
 
@@ -47,7 +34,6 @@ router.get("/:usuarioId", async (req, res) => {
     }
 
 });
-
 
 // CADASTRAR EVOLUÇÃO
 router.post("/", async (req, res) => {
