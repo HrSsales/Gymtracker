@@ -5,298 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Treinos - GymTracker</title>
-
-    <style>
-        /* =========================
-           GERAL
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
-
-        body {
-            background: #121212;
-            color: white;
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            background: #121212;
-            height: 100px;
-            border-bottom: 2px solid #ff6b00;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
-        }
-
-        .logo {
-            position: relative;
-            color: #ff6b00;
-            text-decoration: none;
-            font-size: 34px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            animation: respirar 3s infinite ease-in-out;
-            transition: .3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        @keyframes respirar {
-            0% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-
-            50% {
-                text-shadow: 0 0 20px rgba(255, 107, 0, .8);
-            }
-
-            100% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-        }
-
-        nav {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-        }
-
-        .menu-btn {
-            background: #1d1d1d;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .menu-btn:hover {
-            background: #252525;
-            border-color: #ff6b00;
-            color: #ff6b00;
-            transform: translateY(-2px);
-        }
-
-        .perfil-btn {
-            background: #ff6b00;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: .3s;
-            font-size: 15px;
-        }
-
-        .perfil-btn:hover {
-            background: #ff7f26;
-            transform: translateY(-2px);
-        }
-
-        /* =========================
-           CONTEÚDO
-        ========================= */
-
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 20px;
-        }
-
-        .page-title {
-            text-align: center;
-            font-size: 72px;
-            margin-bottom: 25px;
-        }
-
-        .page-title span {
-            color: #ff6b00;
-        }
-
-        .descricao {
-            text-align: center;
-            font-size: 28px;
-            color: #d6d6d6;
-            max-width: 900px;
-            margin: 0 auto 70px;
-            line-height: 1.6;
-        }
-
-        /* =========================
-           BOTÃO NOVO TREINO
-        ========================= */
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 60px;
-        }
-
-        .create-btn {
-            background: #ff6b00;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 16px 35px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .create-btn:hover {
-            background: #ff7f26;
-            transform: scale(1.05);
-        }
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .treinos-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .treino-card {
-            width: 380px;
-            background: #1d1d1d;
-            border: 2px solid transparent;
-            border-radius: 25px;
-            padding: 30px;
-            transition: all .3s ease;
-        }
-
-        .treino-card:hover {
-            transform: translateY(-8px);
-            border-color: #ff6b00;
-            background: #252525;
-            box-shadow:
-                0 0 20px rgba(255, 107, 0, .3),
-                0 0 40px rgba(255, 107, 0, .1);
-        }
-
-        .treino-card h2 {
-            color: #ff6b00;
-            margin-bottom: 15px;
-            font-size: 28px;
-        }
-
-        .treino-card p {
-            color: #d6d6d6;
-            line-height: 1.7;
-            font-size: 17px;
-        }
-
-        .acoes {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .btn-editar,
-        .btn-excluir {
-            flex: 1;
-            padding: 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: .3s;
-            font-size: 15px;
-        }
-
-        .btn-editar {
-            background: transparent;
-            color: white;
-            border: 1px solid #ff6b00;
-        }
-
-        .btn-editar:hover {
-            background: #ff6b00;
-            transform: translateY(-2px);
-        }
-
-        .btn-excluir {
-            background: transparent;
-            color: white;
-            border: 1px solid #d32f2f;
-        }
-
-        .btn-excluir:hover {
-            background: #d32f2f;
-            transform: translateY(-2px);
-        }
-
-        /* =========================
-           RESPONSIVO
-        ========================= */
-
-        @media (max-width: 1200px) {
-
-            header {
-                flex-direction: column;
-                height: auto;
-                padding: 20px;
-                gap: 15px;
-            }
-
-            nav {
-                position: static;
-                transform: none;
-            }
-
-            .page-title {
-                font-size: 56px;
-            }
-
-            .descricao {
-                font-size: 22px;
-            }
-        }
-
-        @media (max-width: 768px) {
-
-            .page-title {
-                font-size: 42px;
-            }
-
-            .descricao {
-                font-size: 18px;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .treino-card {
-                width: 100%;
-                max-width: 420px;
-            }
-
-            .acoes {
-                flex-direction: column;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -342,44 +50,53 @@
         </h1>
 
         <p class="descricao">
-            Crie, organize e gerencie suas fichas de treino para manter sua rotina
-            sempre atualizada e acompanhar sua evolução na academia.
+            Crie, organize e gerencie suas fichas de treino.
         </p>
 
         <div class="actions">
 
             <button
-    class="create-btn"
-    onclick="novoTreino()"
->
-    + Novo Treino
-</button>
+                class="create-btn"
+                onclick="novoTreino()">
+
+                + Novo Treino
+
+            </button>
+
         </div>
 
         <div
-    class="treinos-grid"
-    id="treinosGrid"
->
+            id="treinosGrid"
+            class="treinos-grid">
 
-</div>
-
-
+        </div>
 
     </main>
 
+<script>
 
-    <script>
+const API_URL = "http://localhost:3000/treinos";
+
+document.addEventListener(
+    "DOMContentLoaded",
+    carregarTreinos
+);
 
 async function carregarTreinos() {
 
     const usuarioId =
         localStorage.getItem("usuarioId");
 
+    if (!usuarioId) {
+        return;
+    }
+
     try {
 
-        const resposta = await fetch(
-            `http://localhost:3000/treinos/${usuarioId}`
-        );
+        const resposta =
+            await fetch(
+                `${API_URL}/${usuarioId}`
+            );
 
         const treinos =
             await resposta.json();
@@ -393,11 +110,8 @@ async function carregarTreinos() {
 
         if (treinos.length === 0) {
 
-            grid.innerHTML = `
-                <p>
-                    Nenhum treino cadastrado.
-                </p>
-            `;
+            grid.innerHTML =
+                "<p class='sem-dados'>Nenhum treino cadastrado.</p>";
 
             return;
         }
@@ -407,23 +121,23 @@ async function carregarTreinos() {
             grid.innerHTML += `
                 <div class="treino-card">
 
-                    <h2>${treino.nome}</h2>
+                    <h3>${treino.nome}</h3>
 
                     <p>
-                        ${treino.descricao}
+                        ${treino.descricao || "Sem descrição"}
                     </p>
 
                     <div class="acoes">
 
                         <button
                             class="btn-editar"
-                        >
+                            onclick="editarTreino(${treino.id})">
                             Editar
                         </button>
 
                         <button
                             class="btn-excluir"
-                        >
+                            onclick="excluirTreino(${treino.id})">
                             Excluir
                         </button>
 
@@ -431,7 +145,6 @@ async function carregarTreinos() {
 
                 </div>
             `;
-
         });
 
     } catch (erro) {
@@ -441,6 +154,7 @@ async function carregarTreinos() {
     }
 
 }
+
 async function novoTreino() {
 
     const nome =
@@ -456,14 +170,16 @@ async function novoTreino() {
 
     try {
 
-        const resposta = await fetch(
-            "http://localhost:3000/treinos",
+        await fetch(
+            API_URL,
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type":
                     "application/json"
                 },
+
                 body: JSON.stringify({
                     nome,
                     descricao,
@@ -471,15 +187,6 @@ async function novoTreino() {
                 })
             }
         );
-
-        if (!resposta.ok) {
-
-            alert(
-                "Erro ao criar treino."
-            );
-
-            return;
-        }
 
         carregarTreinos();
 
@@ -490,11 +197,246 @@ async function novoTreino() {
     }
 
 }
-carregarTreinos();
+
+async function editarTreino(id) {
+
+    const nome =
+        prompt("Novo nome:");
+
+    if (!nome) return;
+
+    const descricao =
+        prompt("Nova descrição:");
+
+    try {
+
+        await fetch(
+            `${API_URL}/${id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+                    nome,
+                    descricao
+                })
+            }
+        );
+
+        carregarTreinos();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+}
+
+async function excluirTreino(id) {
+
+    const confirmar =
+        confirm(
+            "Deseja excluir este treino?"
+        );
+
+    if (!confirmar) return;
+
+    try {
+
+        await fetch(
+            `${API_URL}/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        carregarTreinos();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+}
 
 </script>
 
 
 </body>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    background:#121212;
+    color:white;
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:999;
+
+    background:#121212;
+
+    height:100px;
+
+    border-bottom:2px solid #ff6b00;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 50px;
+}
+
+.logo{
+    text-decoration:none;
+    color:#ff6b00;
+    font-size:34px;
+    font-weight:bold;
+}
+
+nav{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:15px;
+}
+
+.menu-btn{
+    background:#1d1d1d;
+    color:white;
+    border:none;
+    border-radius:30px;
+    padding:15px 25px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    color:#ff6b00;
+}
+
+.perfil-btn{
+    background:#ff6b00;
+    color:white;
+    border:none;
+    border-radius:30px;
+    padding:15px 25px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.create-btn{
+    background:#ff6b00;
+    color:white;
+    border:none;
+    border-radius:30px;
+    padding:15px 30px;
+    cursor:pointer;
+}
+
+main{
+    max-width:1400px;
+    margin:auto;
+    padding:60px 20px;
+}
+
+.page-title{
+    text-align:center;
+    font-size:58px;
+}
+
+.page-title span{
+    color:#ff6b00;
+}
+
+.descricao{
+    text-align:center;
+    color:#cfcfcf;
+    margin:20px auto 50px;
+}
+
+.actions{
+    display:flex;
+    justify-content:center;
+    margin-bottom:40px;
+}
+
+.treinos-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:25px;
+}
+
+.treino-card{
+    width:350px;
+    background:#1d1d1d;
+    padding:25px;
+    border-radius:20px;
+    transition:.3s;
+}
+
+.treino-card:hover{
+    border:1px solid #ff6b00;
+}
+
+.treino-card h3{
+    color:#ff6b00;
+    margin-bottom:10px;
+}
+
+.treino-card p{
+    color:#d6d6d6;
+}
+
+.acoes{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.btn-editar{
+    flex:1;
+    background:#ff6b00;
+    color:white;
+    border:none;
+    border-radius:20px;
+    padding:10px;
+    cursor:pointer;
+}
+
+.btn-excluir{
+    flex:1;
+    background:#c62828;
+    color:white;
+    border:none;
+    border-radius:20px;
+    padding:10px;
+    cursor:pointer;
+}
+
+.sem-dados{
+    color:#888;
+    text-align:center;
+    width:100%;
+}
+
+</style>
 
 </html>

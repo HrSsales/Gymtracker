@@ -443,9 +443,13 @@ async function carregarEvolucao() {
                             Editar
                         </button>
 
-                        <button class="btn-excluir">
-                            Excluir
-                        </button>
+                      <button
+    class="btn-excluir"
+    onclick="excluirEvolucao(${registro.id})">
+
+    Excluir
+
+</button>
 
                     </div>
 
@@ -528,6 +532,34 @@ document
     
 
 });
+async function excluirEvolucao(id) {
+
+    const confirmar =
+        confirm("Deseja excluir este registro?");
+
+    if (!confirmar) return;
+
+    try {
+
+        await fetch(
+            `http://localhost:3000/evolucao/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        carregarEvolucao();
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao excluir evolução:",
+            erro
+        );
+
+    }
+
+}
 
 carregarEvolucao();
 

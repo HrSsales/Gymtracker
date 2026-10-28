@@ -80,6 +80,33 @@ router.post("/", async (req, res) => {
 
     }
 
+    router.delete("/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        await pool.query(
+            "DELETE FROM evolucao WHERE id = $1",
+            [id]
+        );
+
+        res.json({
+            mensagem: "Registro excluído com sucesso"
+        });
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        res.status(500).json({
+            erro: "Erro ao excluir registro"
+        });
+
+    }
+
+});
+
 });
 
 module.exports = router;

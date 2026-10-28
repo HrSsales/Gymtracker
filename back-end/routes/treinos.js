@@ -3,7 +3,9 @@ const pool = require("../config/db");
 
 const router = express.Router();
 
-/* LISTAR TREINOS */
+/* ==================================
+   LISTAR TREINOS
+================================== */
 
 router.get("/:usuarioId", async (req, res) => {
 
@@ -35,38 +37,57 @@ router.get("/:usuarioId", async (req, res) => {
 
 });
 
-/* CRIAR TREINO */
+/* ==================================
+   CRIAR TREINO
+================================== */
 
 router.post("/", async (req, res) => {
 
-    console.log("BODY RECEBIDO:");
-    console.log(req.body);
-
     try {
 
-        const { nome, descricao, usuario_id } = req.body;
+        const {
+            nome,
+            descricao,
+            usuario_id
+        } = req.body;
 
-        console.log(nome);
-        console.log(descricao);
-        console.log(usuario_id);
+        if (!nome || !usuario_id) {
+
+            return res.status(400).json({
+                erro: "Nome e usuário são obrigatórios"
+            });
+
+        }
 
         const resultado = await pool.query(
             `
             INSERT INTO treinos
-            (nome, descricao, usuario_id)
-            VALUES ($1, $2, $3)
+            (
+                nome,
+                descricao,
+                usuario_id
+            )
+            VALUES
+            (
+                $1,
+                $2,
+                $3
+            )
             RETURNING *
             `,
-            [nome, descricao, usuario_id]
+            [
+                nome,
+                descricao,
+                usuario_id
+            ]
         );
 
-        console.log("TREINO CRIADO");
-
-        res.status(201).json(resultado.rows[0]);
+        res.status(201).json(
+            resultado.rows[0]
+        );
 
     } catch (erro) {
 
-        console.error("ERRO TREINOS:");
         console.error(erro);
 
         res.status(500).json({
@@ -76,4 +97,106 @@ router.post("/", async (req, res) => {
     }
 
 });
+
+/* ==================================
+   EDITAR TREINO
+================================== */
+
+router.put("/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const {
+            nome,
+            descricao
+        } = req.body;
+
+        const resultado =
+            await pool.query(
+                `
+                UPDATE treinos
+                SET
+                    nome = $1,
+                    descricao = $2
+                WHERE id = $3
+                RETURNING *
+                `,
+                [
+                    nome,
+                    descricao,
+                    id
+                ]
+            );
+
+        if (resultado.rows.length === 0) {
+
+            return res.status(404).json({
+                erro: "Treino não encontrado"
+            });
+
+        }
+
+        res.json(
+            resultado.rows[0]
+        );
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        res.status(500).json({
+            erro: "Erro ao atualizar treino"
+        });
+
+    }
+
+});
+
+/* ==================================
+   EXCLUIR TREINO
+================================== */
+
+router.delete("/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const resultado =
+            await pool.query(
+                `
+                DELETE FROM treinos
+                WHERE id = $1
+                RETURNING *
+                `,
+                [id]
+            );
+
+        if (resultado.rows.length === 0) {
+
+            return res.status(404).json({
+                erro: "Treino não encontrado"
+            });
+
+        }
+
+        res.json({
+            mensagem:
+                "Treino excluído com sucesso"
+        });
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        res.status(500).json({
+            erro: "Erro ao excluir treino"
+        });
+
+    }
+
+});
+
 module.exports = router;

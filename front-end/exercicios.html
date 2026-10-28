@@ -362,22 +362,28 @@
 
 <script>
 
-const usuarioId = localStorage.getItem("usuarioId");
+const usuarioId =
+localStorage.getItem("usuarioId");
 
 const listaExercicios =
-    document.getElementById("listaExercicios");
+document.getElementById("listaExercicios");
+
+
+// ==========================================
+// LISTAR
+// ==========================================
 
 async function carregarExercicios() {
 
     try {
 
         const resposta =
-            await fetch(
-                `http://localhost:3000/exercicios/${usuarioId}`
-            );
+        await fetch(
+        `http://localhost:3000/exercicios/${usuarioId}`
+        );
 
         const exercicios =
-            await resposta.json();
+        await resposta.json();
 
         listaExercicios.innerHTML = "";
 
@@ -386,9 +392,7 @@ async function carregarExercicios() {
             listaExercicios.innerHTML = `
                 <div class="exercicio-card">
                     <h2>Nenhum exercício cadastrado</h2>
-                    <p>
-                        Clique em Novo Exercício.
-                    </p>
+                    <p>Crie seu primeiro exercício.</p>
                 </div>
             `;
 
@@ -398,44 +402,60 @@ async function carregarExercicios() {
         exercicios.forEach(exercicio => {
 
             listaExercicios.innerHTML += `
+            
+            <div class="exercicio-card">
 
-                <div class="exercicio-card">
+                <h2>${exercicio.nome}</h2>
 
-                    <h2>${exercicio.nome}</h2>
+                <p>
 
-                    <p>
-                        <strong>Treino:</strong>
-                        ${exercicio.treino_nome}
-                        <br><br>
+                    <strong>Treino:</strong>
+                    ${exercicio.treino_nome}
 
-                        <strong>Grupo:</strong>
-                        ${exercicio.grupo_muscular}
-                        <br>
+                    <br><br>
 
-                        <strong>Séries:</strong>
-                        ${exercicio.series}
-                        <br>
+                    <strong>Grupo:</strong>
+                    ${exercicio.grupo_muscular}
 
-                        <strong>Repetições:</strong>
+                    <br>
+
+                    <strong>Séries:</strong>
+                    ${exercicio.series}
+
+                    <br>
+
+                    <strong>Repetições:</strong>
+                    ${exercicio.repeticoes}
+
+                </p>
+
+                <div class="acoes">
+
+                    <button
+                        class="btn-editar"
+                        onclick="editarExercicio(
+                        ${exercicio.id},
+                        '${exercicio.nome}',
+                        '${exercicio.grupo_muscular}',
+                        ${exercicio.series},
                         ${exercicio.repeticoes}
-                    </p>
+                        )"
+                    >
+                        Editar
+                    </button>
 
-                    <div class="acoes">
-
-                        <button class="btn-editar">
-                            Editar
-                        </button>
-
-                        <button class="btn-excluir">
-                            Excluir
-                        </button>
-
-                    </div>
+                    <button
+                        class="btn-excluir"
+                        onclick="excluirExercicio(${exercicio.id})"
+                    >
+                        Excluir
+                    </button>
 
                 </div>
 
-            `;
+            </div>
 
+            `;
         });
 
     } catch (erro) {
@@ -445,68 +465,115 @@ async function carregarExercicios() {
     }
 
 }
+async function carregarTreinos() {
+
+    try {
+
+        const resposta = await fetch(
+            `http://localhost:3000/treinos/${usuarioId}`
+        );
+
+        return await resposta.json();
+
+    } catch (erro) {
+
+        console.error(erro);
+        return [];
+
+    }
+
+}
+
+// ==========================================
+// CRIAR
+// ==========================================
 
 document
 .getElementById("novoExercicio")
 .addEventListener("click", async () => {
 
+    const treinos = await carregarTreinos();
+
+if (treinos.length === 0) {
+
+    alert("Cadastre um treino primeiro.");
+    return;
+
+}
+
+let lista = "Escolha um treino:\n\n";
+
+treinos.forEach((treino, index) => {
+
+    lista += `${index + 1} - ${treino.nome}\n`;
+
+});
+
+const opcao = prompt(lista);
+
+if (!opcao) return;
+
+const treinoSelecionado =
+treinos[parseInt(opcao) - 1];
+
+if (!treinoSelecionado) {
+
+    alert("Treino inválido.");
+    return;
+
+}
+    if (!treinoSelecionado) {
+
+    alert("Treino inválido.");
+    return;
+
+}
+
+    const nome =
+    prompt("Nome do exercício:");
+
+    if(!nome) return;
+
+    const grupo =
+    prompt("Grupo muscular:");
+
+    if(!grupo) return;
+
+    const series =
+    prompt("Séries:");
+
+    if(!series) return;
+
+    const repeticoes =
+    prompt("Repetições:");
+
+    if(!repeticoes) return;
+
     try {
 
-        const treinoId = prompt(
-            "ID do treino:"
+        await fetch(
+            "http://localhost:3000/exercicios",
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    nome,
+                    grupo_muscular: grupo,
+                    series,
+                    repeticoes,
+                    treino_id: treinoSelecionado.id
+
+                })
+
+            }
         );
-
-        if (!treinoId) return;
-
-        const nome = prompt(
-            "Nome do exercício:"
-        );
-
-        if (!nome) return;
-
-        const grupo_muscular = prompt(
-            "Grupo muscular:"
-        );
-
-        if (!grupo_muscular) return;
-
-        const series = prompt(
-            "Quantidade de séries:"
-        );
-
-        if (!series) return;
-
-        const repeticoes = prompt(
-            "Quantidade de repetições:"
-        );
-
-        if (!repeticoes) return;
-
-        const resposta =
-            await fetch(
-                "http://localhost:3000/exercicios",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type":
-                        "application/json"
-                    },
-                    body: JSON.stringify({
-
-                        nome,
-                        grupo_muscular,
-                        series: parseInt(series),
-                        repeticoes: parseInt(repeticoes),
-                        treino_id: parseInt(treinoId)
-
-                    })
-                }
-            );
-
-        const resultado =
-            await resposta.json();
-
-        console.log(resultado);
 
         carregarExercicios();
 
@@ -517,6 +584,119 @@ document
     }
 
 });
+
+
+// ==========================================
+// EDITAR
+// ==========================================
+
+async function editarExercicio(
+    id,
+    nomeAtual,
+    grupoAtual,
+    seriesAtual,
+    repeticoesAtual
+) {
+
+    const nome =
+    prompt(
+        "Nome:",
+        nomeAtual
+    );
+
+    if(!nome) return;
+
+    const grupo =
+    prompt(
+        "Grupo muscular:",
+        grupoAtual
+    );
+
+    if(!grupo) return;
+
+    const series =
+    prompt(
+        "Séries:",
+        seriesAtual
+    );
+
+    if(!series) return;
+
+    const repeticoes =
+    prompt(
+        "Repetições:",
+        repeticoesAtual
+    );
+
+    if(!repeticoes) return;
+
+    try {
+
+        await fetch(
+            `http://localhost:3000/exercicios/${id}`,
+            {
+
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    nome,
+                    grupo_muscular: grupo,
+                    series,
+                    repeticoes
+
+                })
+
+            }
+        );
+
+        carregarExercicios();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+}
+
+
+// ==========================================
+// EXCLUIR
+// ==========================================
+
+async function excluirExercicio(id) {
+
+    const confirmar =
+    confirm(
+    "Deseja excluir este exercício?"
+    );
+
+    if(!confirmar) return;
+
+    try {
+
+        await fetch(
+            `http://localhost:3000/exercicios/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        carregarExercicios();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+
+}
 
 carregarExercicios();
 
