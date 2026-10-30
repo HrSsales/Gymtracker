@@ -1,0 +1,323 @@
+/* ==========================================
+   MODAIS E AVISOS (TOAST)
+   Mesmo visual do GymTracker:
+   fundo #1d1d1d, laranja #ff6b00
+========================================== */
+
+.modal-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.modal-fundo.aberto {
+    opacity: 1;
+}
+
+.modal {
+    width: 100%;
+    max-width: 480px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: #1d1d1d;
+    border: 2px solid #2b2b2b;
+    border-radius: 25px;
+    padding: 35px;
+    color: white;
+    font-family: "Segoe UI", sans-serif;
+    box-shadow:
+        0 0 30px rgba(255, 107, 0, 0.15),
+        0 20px 60px rgba(0, 0, 0, 0.6);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.25s ease;
+}
+
+.modal-fundo.aberto .modal {
+    transform: translateY(0) scale(1);
+}
+
+.modal.perigo {
+    border-color: rgba(198, 40, 40, 0.6);
+}
+
+.modal-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.modal-topo h2 {
+    color: #ff6b00;
+    font-size: 26px;
+    line-height: 1.2;
+}
+
+.modal.perigo .modal-topo h2 {
+    color: #ef5350;
+}
+
+.modal-fechar {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #2b2b2b;
+    color: #d6d6d6;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.modal-fechar:hover {
+    background: #3a3a3a;
+    color: #ff6b00;
+}
+
+.modal-mensagem {
+    color: #d6d6d6;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.modal-mensagem strong {
+    color: white;
+}
+
+.modal-campo {
+    margin-bottom: 18px;
+}
+
+.modal-campo label {
+    display: block;
+    margin-bottom: 6px;
+    color: #d6d6d6;
+    font-size: 14px;
+}
+
+.modal-campo label .obrigatorio {
+    color: #ff6b00;
+}
+
+.modal-campo input,
+.modal-campo select,
+.modal-campo textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: #2b2b2b;
+    color: white;
+    font-size: 15px;
+    font-family: inherit;
+    transition: 0.2s;
+}
+
+.modal-campo textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.modal-campo input:focus,
+.modal-campo select:focus,
+.modal-campo textarea:focus {
+    outline: none;
+    border-color: #ff6b00;
+    background: #303030;
+}
+
+.modal-campo input:user-invalid,
+.modal-campo select:user-invalid {
+    border-color: #c62828;
+}
+
+.modal-campo input[type="date"] {
+    color-scheme: dark;
+}
+
+.modal-campo .ajuda {
+    display: block;
+    margin-top: 6px;
+    color: #8a8a8a;
+    font-size: 12px;
+}
+
+.modal-linha {
+    display: flex;
+    gap: 15px;
+}
+
+.modal-linha .modal-campo {
+    flex: 1;
+}
+
+.modal-erro {
+    display: none;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(198, 40, 40, 0.15);
+    border: 1px solid rgba(198, 40, 40, 0.5);
+    color: #ff8a80;
+    font-size: 14px;
+}
+
+.modal-erro.visivel {
+    display: block;
+}
+
+.modal-botoes {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.modal-botoes button {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.modal-cancelar {
+    background: #2b2b2b;
+}
+
+.modal-cancelar:hover {
+    background: #3a3a3a;
+}
+
+.modal-confirmar {
+    background: #ff6b00;
+}
+
+.modal-confirmar:hover {
+    background: #ff7f26;
+}
+
+.modal.perigo .modal-confirmar {
+    background: #c62828;
+}
+
+.modal.perigo .modal-confirmar:hover {
+    background: #e53935;
+}
+
+.modal-botoes button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+body.modal-ativo {
+    overflow: hidden;
+}
+
+/* ==========================================
+   TOAST
+========================================== */
+
+.toast-area {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    min-width: 260px;
+    max-width: 380px;
+    padding: 15px 20px;
+    border-radius: 15px;
+    background: #1d1d1d;
+    border-left: 5px solid #ff6b00;
+    color: white;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateX(30px);
+    transition: 0.3s ease;
+}
+
+.toast.visivel {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.sucesso {
+    border-left-color: #43a047;
+}
+
+.toast.erro {
+    border-left-color: #c62828;
+}
+
+/* ==========================================
+   CARREGANDO / LISTA VAZIA
+========================================== */
+
+.carregando {
+    width: 100%;
+    text-align: center;
+    color: #888;
+    padding: 40px 0;
+}
+
+.carregando::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 15px;
+    border: 4px solid #2b2b2b;
+    border-top-color: #ff6b00;
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .modal {
+        padding: 25px;
+    }
+
+    .modal-linha {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .toast-area {
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+    }
+
+    .toast {
+        max-width: none;
+    }
+}

@@ -6,294 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercícios - GymTracker</title>
 
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/ui.css">
+
     <style>
-        /* =========================
-           GERAL
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
-
-        body {
-            background: #121212;
-            color: white;
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            background: #121212;
-            height: 100px;
-            border-bottom: 2px solid #ff6b00;
+        .detalhe-linha {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
+            padding: 8px 0;
+            border-bottom: 1px solid #2b2b2b;
         }
 
-        .logo {
-            position: relative;
-            color: #ff6b00;
-            text-decoration: none;
-            font-size: 34px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            animation: respirar 3s infinite ease-in-out;
-            transition: .3s;
+        .detalhe-linha:last-child {
+            border-bottom: none;
         }
 
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        @keyframes respirar {
-            0% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-
-            50% {
-                text-shadow: 0 0 20px rgba(255, 107, 0, .8);
-            }
-
-            100% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-        }
-
-        nav {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-        }
-
-        .menu-btn {
-            background: #1d1d1d;
+        .detalhe-linha strong {
             color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .menu-btn:hover {
-            background: #252525;
-            color: #ff6b00;
-            transform: translateY(-2px);
-        }
-
-        .perfil-btn {
-            background: #ff6b00;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: .3s;
-            font-size: 15px;
-        }
-
-        .perfil-btn:hover {
-            background: #ff7f26;
-            transform: translateY(-2px);
-        }
-
-        /* =========================
-           CONTEÚDO
-        ========================= */
-
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 20px;
-        }
-
-        .page-title {
-            text-align: center;
-            font-size: 72px;
-            margin-bottom: 25px;
-        }
-
-        .page-title span {
-            color: #ff6b00;
-        }
-
-        .descricao {
-            text-align: center;
-            font-size: 28px;
-            color: #d6d6d6;
-            max-width: 900px;
-            margin: 0 auto 70px;
-            line-height: 1.6;
-        }
-
-        /* =========================
-           BOTÃO NOVO EXERCÍCIO
-        ========================= */
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 60px;
-        }
-
-        .create-btn {
-            background: #ff6b00;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 16px 35px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .create-btn:hover {
-            background: #ff7f26;
-            transform: scale(1.05);
-        }
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .exercicios-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .exercicio-card {
-            width: 380px;
-            background: #1d1d1d;
-            border: 2px solid transparent;
-            border-radius: 25px;
-            padding: 30px;
-            transition: all .3s ease;
-        }
-
-        .exercicio-card:hover {
-            transform: translateY(-8px);
-            border-color: #ff6b00;
-            background: #252525;
-            box-shadow:
-                0 0 20px rgba(255, 107, 0, .3),
-                0 0 40px rgba(255, 107, 0, .1);
-        }
-
-        .exercicio-card h2 {
-            color: #ff6b00;
-            margin-bottom: 15px;
-            font-size: 28px;
-        }
-
-        .exercicio-card p {
-            color: #d6d6d6;
-            line-height: 1.7;
-            font-size: 17px;
-        }
-
-        .acoes {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .btn-editar,
-        .btn-excluir {
-            flex: 1;
-            padding: 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: .3s;
-            font-size: 15px;
-        }
-
-        .btn-editar {
-            background: transparent;
-            color: white;
-            border: 1px solid #ff6b00;
-        }
-
-        .btn-editar:hover {
-            background: #ff6b00;
-            transform: translateY(-2px);
-        }
-
-        .btn-excluir {
-            background: transparent;
-            color: white;
-            border: 1px solid #d32f2f;
-        }
-
-        .btn-excluir:hover {
-            background: #d32f2f;
-            transform: translateY(-2px);
-        }
-
-        /* =========================
-           RESPONSIVO
-        ========================= */
-
-        @media (max-width: 1200px) {
-
-            header {
-                flex-direction: column;
-                height: auto;
-                padding: 20px;
-                gap: 15px;
-            }
-
-            nav {
-                position: static;
-                transform: none;
-            }
-
-            .page-title {
-                font-size: 56px;
-            }
-
-            .descricao {
-                font-size: 22px;
-            }
-        }
-
-        @media (max-width: 768px) {
-
-            .page-title {
-                font-size: 42px;
-            }
-
-            .descricao {
-                font-size: 18px;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .exercicio-card {
-                width: 100%;
-                max-width: 420px;
-            }
-
-            .acoes {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -313,7 +42,7 @@
                 Treinos
             </button>
 
-            <button class="menu-btn"
+            <button class="menu-btn ativo"
                 onclick="window.location.href='exercicios.html'">
                 Exercícios
             </button>
@@ -328,7 +57,7 @@
         <button class="perfil-btn"
             onclick="window.location.href='perfil.html'">
 
-            👤 Perfil
+            👤 <span id="boasVindas">Perfil</span>
 
         </button>
 
@@ -345,6 +74,11 @@
     </p>
 
     <div class="actions">
+
+        <select id="filtroTreino" class="filtro" aria-label="Filtrar por treino">
+            <option value="">Todos os treinos</option>
+        </select>
+
         <button
             class="create-btn"
             id="novoExercicio">
@@ -356,17 +90,70 @@
     <div
         class="exercicios-grid"
         id="listaExercicios">
+
+        <p class="carregando">Carregando exercícios...</p>
+
     </div>
 
 </main>
 
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
 <script>
 
-const usuarioId =
-localStorage.getItem("usuarioId");
+exigirLogin();
+mostrarNomeUsuario();
 
 const listaExercicios =
 document.getElementById("listaExercicios");
+
+const filtroTreino =
+document.getElementById("filtroTreino");
+
+let exercicios = [];
+let treinos = [];
+let grupos = [];
+
+
+// ==========================================
+// CARREGAR TREINOS E GRUPOS (para os selects)
+// ==========================================
+
+async function carregarOpcoes() {
+
+    [treinos, grupos] = await Promise.all([
+        api("/treinos"),
+        api("/exercicios/grupos")
+    ]);
+
+    filtroTreino.innerHTML =
+        `<option value="">Todos os treinos</option>` +
+        treinos.map(treino => `
+            <option value="${treino.id}">${escaparHTML(treino.nome)}</option>
+        `).join("");
+
+    // Veio da página de treinos com ?treino=ID
+    const treinoDaUrl = new URLSearchParams(location.search).get("treino");
+
+    if (treinoDaUrl && treinos.some(t => String(t.id) === treinoDaUrl)) {
+        filtroTreino.value = treinoDaUrl;
+    }
+}
+
+filtroTreino.addEventListener("change", () => {
+
+    const url = new URL(location.href);
+
+    if (filtroTreino.value) {
+        url.searchParams.set("treino", filtroTreino.value);
+    } else {
+        url.searchParams.delete("treino");
+    }
+
+    history.replaceState(null, "", url);
+
+    carregarExercicios();
+});
 
 
 // ==========================================
@@ -377,55 +164,47 @@ async function carregarExercicios() {
 
     try {
 
-        const resposta =
-        await fetch(
-        `http://localhost:3000/exercicios/${usuarioId}`
-        );
+        const filtro = filtroTreino.value
+            ? `?treino_id=${filtroTreino.value}`
+            : "";
 
-        const exercicios =
-        await resposta.json();
-
-        listaExercicios.innerHTML = "";
+        exercicios = await api(`/exercicios${filtro}`);
 
         if (exercicios.length === 0) {
 
             listaExercicios.innerHTML = `
-                <div class="exercicio-card">
+                <div class="sem-dados">
                     <h2>Nenhum exercício cadastrado</h2>
-                    <p>Crie seu primeiro exercício.</p>
+                    <p>${treinos.length === 0
+                        ? "Crie um treino primeiro, depois adicione os exercícios nele."
+                        : "Clique em \"+ Novo Exercício\" para adicionar o primeiro."}</p>
                 </div>
             `;
 
             return;
         }
 
-        exercicios.forEach(exercicio => {
+        listaExercicios.innerHTML = exercicios.map(exercicio => `
 
-            listaExercicios.innerHTML += `
-            
             <div class="exercicio-card">
 
-                <h2>${exercicio.nome}</h2>
+                <span class="etiqueta">${escaparHTML(exercicio.treino_nome)}</span>
+
+                <h2>${escaparHTML(exercicio.nome)}</h2>
 
                 <p>
 
-                    <strong>Treino:</strong>
-                    ${exercicio.treino_nome}
+                    <span class="detalhe-linha">
+                        Grupo <strong>${escaparHTML(exercicio.grupo_muscular)}</strong>
+                    </span>
 
-                    <br><br>
+                    <span class="detalhe-linha">
+                        Séries <strong>${exercicio.series}</strong>
+                    </span>
 
-                    <strong>Grupo:</strong>
-                    ${exercicio.grupo_muscular}
-
-                    <br>
-
-                    <strong>Séries:</strong>
-                    ${exercicio.series}
-
-                    <br>
-
-                    <strong>Repetições:</strong>
-                    ${exercicio.repeticoes}
+                    <span class="detalhe-linha">
+                        Repetições <strong>${exercicio.repeticoes}</strong>
+                    </span>
 
                 </p>
 
@@ -433,13 +212,7 @@ async function carregarExercicios() {
 
                     <button
                         class="btn-editar"
-                        onclick="editarExercicio(
-                        ${exercicio.id},
-                        '${exercicio.nome}',
-                        '${exercicio.grupo_muscular}',
-                        ${exercicio.series},
-                        ${exercicio.repeticoes}
-                        )"
+                        onclick="editarExercicio(${exercicio.id})"
                     >
                         Editar
                     </button>
@@ -455,34 +228,90 @@ async function carregarExercicios() {
 
             </div>
 
-            `;
-        });
+        `).join("");
 
     } catch (erro) {
 
-        console.error(erro);
+        listaExercicios.innerHTML = `
+            <div class="sem-dados">
+                <h2>Erro ao carregar</h2>
+                <p>${escaparHTML(erro.message)}</p>
+            </div>
+        `;
 
     }
 
 }
-async function carregarTreinos() {
 
-    try {
 
-        const resposta = await fetch(
-            `http://localhost:3000/treinos/${usuarioId}`
-        );
+// ==========================================
+// CAMPOS DO MODAL
+// ==========================================
 
-        return await resposta.json();
+function camposExercicio(exercicio = {}) {
 
-    } catch (erro) {
-
-        console.error(erro);
-        return [];
-
-    }
-
+    return [
+        {
+            nome: "treino_id",
+            rotulo: "Treino",
+            tipo: "select",
+            obrigatorio: true,
+            valor: exercicio.treino_id ?? filtroTreino.value,
+            opcoes: treinos.map(t => ({ valor: t.id, texto: t.nome }))
+        },
+        {
+            nome: "nome",
+            rotulo: "Nome do exercício",
+            obrigatorio: true,
+            maxlength: 100,
+            placeholder: "Ex: Supino reto",
+            valor: exercicio.nome
+        },
+        {
+            nome: "grupo_muscular",
+            rotulo: "Grupo muscular",
+            tipo: "select",
+            obrigatorio: true,
+            valor: exercicio.grupo_muscular,
+            opcoes: grupos.map(g => ({ valor: g, texto: g }))
+        },
+        {
+            linha: [
+                {
+                    nome: "series",
+                    rotulo: "Séries",
+                    tipo: "number",
+                    obrigatorio: true,
+                    min: 1,
+                    max: 20,
+                    step: 1,
+                    valor: exercicio.series ?? 3
+                },
+                {
+                    nome: "repeticoes",
+                    rotulo: "Repetições",
+                    tipo: "number",
+                    obrigatorio: true,
+                    min: 1,
+                    max: 100,
+                    step: 1,
+                    valor: exercicio.repeticoes ?? 12
+                }
+            ]
+        }
+    ];
 }
+
+function converterNumeros(valores) {
+
+    return {
+        ...valores,
+        treino_id: Number(valores.treino_id),
+        series: Number(valores.series),
+        repeticoes: Number(valores.repeticoes)
+    };
+}
+
 
 // ==========================================
 // CRIAR
@@ -492,96 +321,36 @@ document
 .getElementById("novoExercicio")
 .addEventListener("click", async () => {
 
-    const treinos = await carregarTreinos();
+    if (treinos.length === 0) {
 
-if (treinos.length === 0) {
-
-    alert("Cadastre um treino primeiro.");
-    return;
-
-}
-
-let lista = "Escolha um treino:\n\n";
-
-treinos.forEach((treino, index) => {
-
-    lista += `${index + 1} - ${treino.nome}\n`;
-
-});
-
-const opcao = prompt(lista);
-
-if (!opcao) return;
-
-const treinoSelecionado =
-treinos[parseInt(opcao) - 1];
-
-if (!treinoSelecionado) {
-
-    alert("Treino inválido.");
-    return;
-
-}
-    if (!treinoSelecionado) {
-
-    alert("Treino inválido.");
-    return;
-
-}
-
-    const nome =
-    prompt("Nome do exercício:");
-
-    if(!nome) return;
-
-    const grupo =
-    prompt("Grupo muscular:");
-
-    if(!grupo) return;
-
-    const series =
-    prompt("Séries:");
-
-    if(!series) return;
-
-    const repeticoes =
-    prompt("Repetições:");
-
-    if(!repeticoes) return;
-
-    try {
-
-        await fetch(
-            "http://localhost:3000/exercicios",
-            {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    nome,
-                    grupo_muscular: grupo,
-                    series,
-                    repeticoes,
-                    treino_id: treinoSelecionado.id
-
-                })
-
+        await confirmarAcao({
+            titulo: "Nenhum treino ainda",
+            mensagem: "Todo exercício pertence a um treino. Crie um treino primeiro.",
+            textoConfirmar: "Criar treino",
+            perigo: false,
+            aoConfirmar: async () => {
+                window.location.href = "treinos.html";
             }
-        );
+        });
 
-        carregarExercicios();
-
-    } catch (erro) {
-
-        console.error(erro);
-
+        return;
     }
+
+    await abrirFormulario({
+        titulo: "Novo Exercício",
+        campos: camposExercicio(),
+        textoConfirmar: "Adicionar",
+        aoSalvar: async (valores) => {
+
+            await api("/exercicios", {
+                method: "POST",
+                body: converterNumeros(valores)
+            });
+
+            mostrarToast("Exercício adicionado!");
+            carregarExercicios();
+        }
+    });
 
 });
 
@@ -590,78 +359,27 @@ if (!treinoSelecionado) {
 // EDITAR
 // ==========================================
 
-async function editarExercicio(
-    id,
-    nomeAtual,
-    grupoAtual,
-    seriesAtual,
-    repeticoesAtual
-) {
+async function editarExercicio(id) {
 
-    const nome =
-    prompt(
-        "Nome:",
-        nomeAtual
-    );
+    const exercicio = exercicios.find(e => e.id === id);
 
-    if(!nome) return;
+    if (!exercicio) return;
 
-    const grupo =
-    prompt(
-        "Grupo muscular:",
-        grupoAtual
-    );
+    await abrirFormulario({
+        titulo: "Editar Exercício",
+        campos: camposExercicio(exercicio),
+        textoConfirmar: "Salvar alterações",
+        aoSalvar: async (valores) => {
 
-    if(!grupo) return;
-
-    const series =
-    prompt(
-        "Séries:",
-        seriesAtual
-    );
-
-    if(!series) return;
-
-    const repeticoes =
-    prompt(
-        "Repetições:",
-        repeticoesAtual
-    );
-
-    if(!repeticoes) return;
-
-    try {
-
-        await fetch(
-            `http://localhost:3000/exercicios/${id}`,
-            {
-
+            await api(`/exercicios/${id}`, {
                 method: "PUT",
+                body: converterNumeros(valores)
+            });
 
-                headers: {
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    nome,
-                    grupo_muscular: grupo,
-                    series,
-                    repeticoes
-
-                })
-
-            }
-        );
-
-        carregarExercicios();
-
-    } catch (erro) {
-
-        console.error(erro);
-
-    }
+            mostrarToast("Exercício atualizado!");
+            carregarExercicios();
+        }
+    });
 
 }
 
@@ -672,33 +390,44 @@ async function editarExercicio(
 
 async function excluirExercicio(id) {
 
-    const confirmar =
-    confirm(
-    "Deseja excluir este exercício?"
-    );
+    const exercicio = exercicios.find(e => e.id === id);
 
-    if(!confirmar) return;
+    if (!exercicio) return;
 
-    try {
+    await confirmarAcao({
+        titulo: "Excluir exercício?",
+        mensagem: `<strong>${escaparHTML(exercicio.nome)}</strong> será removido do treino
+            <strong>${escaparHTML(exercicio.treino_nome)}</strong>, junto com os registros de evolução dele.
+            <br><br>Essa ação não pode ser desfeita.`,
+        textoConfirmar: "Sim, excluir",
+        aoConfirmar: async () => {
 
-        await fetch(
-            `http://localhost:3000/exercicios/${id}`,
-            {
+            await api(`/exercicios/${id}`, {
                 method: "DELETE"
-            }
-        );
+            });
 
-        carregarExercicios();
-
-    } catch (erro) {
-
-        console.error(erro);
-
-    }
+            mostrarToast("Exercício removido.");
+            carregarExercicios();
+        }
+    });
 
 }
 
-carregarExercicios();
+
+// ==========================================
+// INÍCIO
+// ==========================================
+
+carregarOpcoes()
+    .then(carregarExercicios)
+    .catch((erro) => {
+        listaExercicios.innerHTML = `
+            <div class="sem-dados">
+                <h2>Erro ao carregar</h2>
+                <p>${escaparHTML(erro.message)}</p>
+            </div>
+        `;
+    });
 
 </script>
 

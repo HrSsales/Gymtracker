@@ -1,0 +1,402 @@
+/* ==========================================
+   ESTILO BASE DAS PÁGINAS INTERNAS
+   (dashboard, treinos, exercícios,
+   evolução e perfil). Antes cada página
+   repetia este CSS com pequenas diferenças.
+========================================== */
+
+/* =========================
+   GERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: #121212;
+    color: white;
+    min-height: 100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: #121212;
+    height: 100px;
+    border-bottom: 2px solid #ff6b00;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+}
+
+.logo {
+    position: relative;
+    color: #ff6b00;
+    text-decoration: none;
+    font-size: 34px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    animation: respirar 3s infinite ease-in-out;
+    transition: .3s;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+@keyframes respirar {
+    0% {
+        text-shadow: 0 0 5px rgba(255, 107, 0, .3);
+    }
+
+    50% {
+        text-shadow: 0 0 20px rgba(255, 107, 0, .8);
+    }
+
+    100% {
+        text-shadow: 0 0 5px rgba(255, 107, 0, .3);
+    }
+}
+
+nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+}
+
+.menu-btn {
+    background: #1d1d1d;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 25px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.menu-btn:hover {
+    background: #252525;
+    color: #ff6b00;
+    transform: translateY(-2px);
+}
+
+/* Página atual fica destacada no menu */
+.menu-btn.ativo {
+    background: #252525;
+    color: #ff6b00;
+    box-shadow: inset 0 0 0 1px #ff6b00;
+}
+
+.perfil-btn {
+    background: #ff6b00;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 25px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 15px;
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.perfil-btn:hover {
+    background: #ff7f26;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 20px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 72px;
+    margin-bottom: 25px;
+}
+
+.page-title span {
+    color: #ff6b00;
+}
+
+.descricao {
+    text-align: center;
+    font-size: 28px;
+    color: #d6d6d6;
+    max-width: 900px;
+    margin: 0 auto 70px;
+    line-height: 1.6;
+}
+
+/* =========================
+   BARRA DE AÇÕES
+========================= */
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 60px;
+}
+
+.create-btn {
+    background: #ff6b00;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 16px 35px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.create-btn:hover {
+    background: #ff7f26;
+    transform: scale(1.05);
+}
+
+.filtro {
+    background: #1d1d1d;
+    color: white;
+    border: 2px solid #2b2b2b;
+    border-radius: 30px;
+    padding: 14px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.filtro:focus,
+.filtro:hover {
+    outline: none;
+    border-color: #ff6b00;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.cards-grid,
+.treinos-grid,
+.exercicios-grid,
+.evolucao-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.treino-card,
+.exercicio-card,
+.evolucao-card {
+    width: 380px;
+    background: #1d1d1d;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transition: all .3s ease;
+}
+
+.treino-card:hover,
+.exercicio-card:hover,
+.evolucao-card:hover {
+    transform: translateY(-8px);
+    border-color: #ff6b00;
+    background: #252525;
+    box-shadow:
+        0 0 20px rgba(255, 107, 0, .3),
+        0 0 40px rgba(255, 107, 0, .1);
+}
+
+.treino-card h2,
+.exercicio-card h2,
+.evolucao-card h2 {
+    color: #ff6b00;
+    margin-bottom: 15px;
+    font-size: 28px;
+    word-break: break-word;
+}
+
+.treino-card p,
+.exercicio-card p,
+.evolucao-card p {
+    color: #d6d6d6;
+    line-height: 1.7;
+    font-size: 17px;
+    word-break: break-word;
+}
+
+.etiqueta {
+    display: inline-block;
+    align-self: flex-start;
+    background: rgba(255, 107, 0, .12);
+    color: #ff9d57;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+/* Lista vazia */
+.sem-dados {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+    background: #1d1d1d;
+    border: 2px dashed #2b2b2b;
+    border-radius: 25px;
+    padding: 45px 30px;
+}
+
+.sem-dados h2 {
+    color: #ff6b00;
+    margin-bottom: 10px;
+}
+
+.sem-dados p {
+    color: #aaa;
+    line-height: 1.6;
+}
+
+/* =========================
+   BOTÕES DOS CARDS
+========================= */
+
+.acoes {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 25px;
+}
+
+.btn-editar,
+.btn-excluir {
+    flex: 1;
+    padding: 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 15px;
+    color: white;
+    background: transparent;
+}
+
+.btn-editar {
+    border: 1px solid #ff6b00;
+}
+
+.btn-editar:hover {
+    background: #ff6b00;
+    transform: translateY(-2px);
+}
+
+.btn-excluir {
+    border: 1px solid #d32f2f;
+}
+
+.btn-excluir:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible {
+    outline: 2px solid #ff6b00;
+    outline-offset: 2px;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 1200px) {
+
+    header {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    nav {
+        position: static;
+        transform: none;
+    }
+
+    .page-title {
+        font-size: 56px;
+    }
+
+    .descricao {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* No celular o topo é alto: não fica grudado, para sobrar tela */
+    header {
+        position: static;
+    }
+
+    main {
+        padding: 60px 16px;
+    }
+
+    .page-title {
+        font-size: 42px;
+    }
+
+    .descricao {
+        font-size: 18px;
+        margin-bottom: 45px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .menu-btn,
+    .perfil-btn {
+        padding: 12px 18px;
+    }
+
+    .treino-card,
+    .exercicio-card,
+    .evolucao-card {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+}

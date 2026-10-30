@@ -3,37 +3,43 @@ const pool = require("../config/db");
 
 const router = express.Router();
 
-router.get("/:usuarioId", async (req, res) => {
+/* ==================================
+   ESTATÍSTICAS DO USUÁRIO LOGADO
+================================== */
+
+router.get("/", async (req, res) => {
 
     try {
 
-        const { usuarioId } = req.params;
+        const usuarioId = req.usuario.id;
 
-        const treinos = await pool.query(
-            "SELECT COUNT(*) FROM treinos WHERE usuario_id = $1",
-            [usuarioId]
-        );
-
-        const exercicios = await pool.query(
+        // A tabela evolucao não tem usuario_id:
+        // chega no usuário passando por exercicios -> treinos
+        const resultado = await pool.query(
             `
-            SELECT COUNT(*)
-            FROM exercicios e
-            INNER JOIN treinos t
-            ON e.treino_id = t.id
-            WHERE t.usuario_id = $1
+            SELECT
+                (SELECT COUNT(*) FROM treinos WHERE usuario_id = $1) AS treinos,
+
+                (SELECT COUNT(*)
+                 FROM exercicios e
+                 INNER JOIN treinos t ON e.treino_id = t.id
+                 WHERE t.usuario_id = $1) AS exercicios,
+
+                (SELECT COUNT(*)
+                 FROM evolucao ev
+                 INNER JOIN exercicios e ON ev.exercicio_id = e.id
+                 INNER JOIN treinos t ON e.treino_id = t.id
+                 WHERE t.usuario_id = $1) AS evolucoes
             `,
             [usuarioId]
         );
 
-        const evolucoes = await pool.query(
-            "SELECT COUNT(*) FROM evolucao WHERE usuario_id = $1",
-            [usuarioId]
-        );
+        const stats = resultado.rows[0];
 
         res.json({
-            treinos: treinos.rows[0].count,
-            exercicios: exercicios.rows[0].count,
-            evolucoes: evolucoes.rows[0].count
+            treinos: Number(stats.treinos),
+            exercicios: Number(stats.exercicios),
+            evolucoes: Number(stats.evolucoes)
         });
 
     } catch (erro) {

@@ -6,294 +6,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evolução - GymTracker</title>
 
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/ui.css">
+
     <style>
-        /* =========================
-           GERAL
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
-
-        body {
-            background: #121212;
-            color: white;
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            background: #121212;
-            height: 100px;
-            border-bottom: 2px solid #ff6b00;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
-        }
-
-        .logo {
-            position: relative;
-            color: #ff6b00;
-            text-decoration: none;
-            font-size: 34px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            animation: respirar 3s infinite ease-in-out;
-            transition: .3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        @keyframes respirar {
-            0% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-
-            50% {
-                text-shadow: 0 0 20px rgba(255, 107, 0, .8);
-            }
-
-            100% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-        }
-
-        nav {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-        }
-
-        .menu-btn {
-            background: #1d1d1d;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .menu-btn:hover {
-            background: #252525;
-            color: #ff6b00;
-            transform: translateY(-2px);
-        }
-
-        .perfil-btn {
-            background: #ff6b00;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: .3s;
-            font-size: 15px;
-        }
-
-        .perfil-btn:hover {
-            background: #ff7f26;
-            transform: translateY(-2px);
-        }
-
-        /* =========================
-           CONTEÚDO
-        ========================= */
-
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 20px;
-        }
-
-        .page-title {
-            text-align: center;
-            font-size: 72px;
-            margin-bottom: 25px;
-        }
-
-        .page-title span {
-            color: #ff6b00;
-        }
-
-        .descricao {
-            text-align: center;
-            font-size: 28px;
-            color: #d6d6d6;
-            max-width: 900px;
-            margin: 0 auto 70px;
-            line-height: 1.6;
-        }
-
-        /* =========================
-           BOTÃO NOVO REGISTRO
-        ========================= */
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 60px;
-        }
-
-        .create-btn {
-            background: #ff6b00;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 16px 35px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .create-btn:hover {
-            background: #ff7f26;
-            transform: scale(1.05);
-        }
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .evolucao-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .evolucao-card {
-            width: 380px;
-            background: #1d1d1d;
-            border: 2px solid transparent;
-            border-radius: 25px;
-            padding: 30px;
-            transition: all .3s ease;
-        }
-
-        .evolucao-card:hover {
-            transform: translateY(-8px);
-            border-color: #ff6b00;
-            background: #252525;
-            box-shadow:
-                0 0 20px rgba(255, 107, 0, .3),
-                0 0 40px rgba(255, 107, 0, .1);
-        }
-
-        .evolucao-card h2 {
-            font-size: 28px;
-            color: #ff6b00;
-            margin-bottom: 15px;
-        }
-
         .evolucao-card p {
-            color: #d6d6d6;
             line-height: 1.8;
-            font-size: 17px;
         }
 
-        .acoes {
+        .peso-grande {
             display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
             gap: 12px;
-            margin-top: 25px;
+            margin-bottom: 12px;
         }
 
-        .btn-editar,
-        .btn-excluir {
-            flex: 1;
-            padding: 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: .3s;
-            font-size: 15px;
-        }
-
-        .btn-editar {
-            background: transparent;
+        .peso-grande strong {
+            font-size: 40px;
             color: white;
-            border: 1px solid #ff6b00;
         }
 
-        .btn-editar:hover {
-            background: #ff6b00;
-            transform: translateY(-2px);
+        .peso-grande small {
+            color: #aaa;
+            font-size: 18px;
         }
 
-        .btn-excluir {
-            background: transparent;
-            color: white;
-            border: 1px solid #d32f2f;
+        .variacao {
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .btn-excluir:hover {
-            background: #d32f2f;
-            transform: translateY(-2px);
+        .variacao.subiu {
+            background: rgba(67, 160, 71, .15);
+            color: #81c784;
         }
 
-        /* =========================
-           RESPONSIVO
-        ========================= */
-
-        @media (max-width: 1200px) {
-
-            header {
-                flex-direction: column;
-                height: auto;
-                padding: 20px;
-                gap: 15px;
-            }
-
-            nav {
-                position: static;
-                transform: none;
-            }
-
-            .page-title {
-                font-size: 56px;
-            }
-
-            .descricao {
-                font-size: 22px;
-            }
+        .variacao.caiu {
+            background: rgba(198, 40, 40, .15);
+            color: #ef9a9a;
         }
 
-        @media (max-width: 768px) {
+        .variacao.manteve {
+            background: #2b2b2b;
+            color: #bbb;
+        }
 
-            .page-title {
-                font-size: 42px;
-            }
-
-            .descricao {
-                font-size: 18px;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .evolucao-card {
-                width: 100%;
-                max-width: 420px;
-            }
-
-            .acoes {
-                flex-direction: column;
-            }
+        .observacao {
+            margin-top: 10px;
+            color: #aaa;
+            font-style: italic;
         }
     </style>
 </head>
@@ -318,7 +82,7 @@
                 Exercícios
             </button>
 
-            <button class="menu-btn"
+            <button class="menu-btn ativo"
                 onclick="window.location.href='evolucao.html'">
                 Evolução
             </button>
@@ -328,7 +92,7 @@
         <button class="perfil-btn"
             onclick="window.location.href='perfil.html'">
 
-            👤 Perfil
+            👤 <span id="boasVindas">Perfil</span>
 
         </button>
 
@@ -347,6 +111,10 @@
 
     <div class="actions">
 
+        <select id="filtroExercicio" class="filtro" aria-label="Filtrar por exercício">
+            <option value="">Todos os exercícios</option>
+        </select>
+
         <button
             class="create-btn"
             id="novoRegistro">
@@ -354,214 +122,337 @@
             + Novo Registro
 
         </button>
-
     </div>
 
     <div
         class="evolucao-grid"
         id="listaEvolucao">
 
+        <p class="carregando">Carregando registros...</p>
+
     </div>
 
 </main>
 
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
 <script>
 
-const usuarioId = localStorage.getItem("usuarioId");
+exigirLogin();
+mostrarNomeUsuario();
 
 const listaEvolucao =
     document.getElementById("listaEvolucao");
+
+const filtroExercicio =
+    document.getElementById("filtroExercicio");
+
+let registros = [];
+let exercicios = [];
+
+
+// ==========================================
+// EXERCÍCIOS (para o select)
+// Antes era preciso digitar o ID na mão
+// ==========================================
+
+async function carregarExercicios() {
+
+    exercicios = await api("/exercicios");
+
+    filtroExercicio.innerHTML =
+        `<option value="">Todos os exercícios</option>` +
+        exercicios.map(exercicio => `
+            <option value="${exercicio.id}">
+                ${escaparHTML(exercicio.nome)} (${escaparHTML(exercicio.treino_nome)})
+            </option>
+        `).join("");
+}
+
+filtroExercicio.addEventListener("change", carregarEvolucao);
+
+
+// ==========================================
+// LISTAR
+// ==========================================
+
+function montarVariacao(diferenca) {
+
+    if (diferenca === null || diferenca === undefined) {
+        return `<span class="variacao manteve">Primeiro registro</span>`;
+    }
+
+    const valor = Number(diferenca);
+
+    if (valor > 0) {
+        return `<span class="variacao subiu">▲ +${valor.toLocaleString("pt-BR")} kg</span>`;
+    }
+
+    if (valor < 0) {
+        return `<span class="variacao caiu">▼ ${valor.toLocaleString("pt-BR")} kg</span>`;
+    }
+
+    return `<span class="variacao manteve">= mesma carga</span>`;
+}
 
 async function carregarEvolucao() {
 
     try {
 
-        const resposta = await fetch(
-            `http://localhost:3000/evolucao/${usuarioId}`
-        );
+        const filtro = filtroExercicio.value
+            ? `?exercicio_id=${filtroExercicio.value}`
+            : "";
 
-        const registros = await resposta.json();
-
-        listaEvolucao.innerHTML = "";
+        registros = await api(`/evolucao${filtro}`);
 
         if (registros.length === 0) {
 
             listaEvolucao.innerHTML = `
-
-                <div class="evolucao-card">
-
-                    <h2>
-                        Nenhum registro encontrado
-                    </h2>
-
-                    <p>
-                        Clique em
-                        "Novo Registro"
-                        para começar.
-                    </p>
-
+                <div class="sem-dados">
+                    <h2>Nenhum registro encontrado</h2>
+                    <p>${exercicios.length === 0
+                        ? "Cadastre um exercício primeiro para registrar suas cargas."
+                        : "Clique em \"+ Novo Registro\" para começar."}</p>
                 </div>
-
             `;
 
             return;
-
         }
 
-        registros.forEach(registro => {
+        listaEvolucao.innerHTML = registros.map(registro => `
 
-            listaEvolucao.innerHTML += `
+            <div class="evolucao-card">
 
-                <div class="evolucao-card">
+                <span class="etiqueta">${escaparHTML(registro.treino_nome)}</span>
 
-                    <h2>
-                        ${registro.exercicio_nome}
-                    </h2>
+                <h2>
+                    ${escaparHTML(registro.exercicio_nome)}
+                </h2>
 
-                    <p>
+                <div class="peso-grande">
+                    <strong>${Number(registro.peso).toLocaleString("pt-BR")} <small>kg</small></strong>
+                    ${montarVariacao(registro.diferenca)}
+                </div>
 
-                        📅 Data:
-                        ${new Date(
-                            registro.data_registro
-                        ).toLocaleDateString("pt-BR")}
+                <p>
+                    📅 ${formatarData(registro.data_registro)}
+                </p>
 
-                        <br><br>
+                ${registro.observacao
+                    ? `<p class="observacao">📝 ${escaparHTML(registro.observacao)}</p>`
+                    : ""}
 
-                        ⚖️ Peso:
-                        ${registro.peso} kg
+                <div class="acoes">
 
-                        <br><br>
+                    <button
+                        class="btn-editar"
+                        onclick="editarEvolucao(${registro.id})">
+                        Editar
+                    </button>
 
-                        📝 Observação:
-                        ${registro.observacao || "Sem observação"}
-
-                    </p>
-
-                    <div class="acoes">
-
-                        <button class="btn-editar">
-                            Editar
-                        </button>
-
-                      <button
-    class="btn-excluir"
-    onclick="excluirEvolucao(${registro.id})">
-
-    Excluir
-
-</button>
-
-                    </div>
+                    <button
+                        class="btn-excluir"
+                        onclick="excluirEvolucao(${registro.id})">
+                        Excluir
+                    </button>
 
                 </div>
 
-            `;
+            </div>
 
-        });
+        `).join("");
 
     } catch (erro) {
 
-        console.error(
-            "Erro ao carregar evolução:",
-            erro
-        );
+        listaEvolucao.innerHTML = `
+            <div class="sem-dados">
+                <h2>Erro ao carregar</h2>
+                <p>${escaparHTML(erro.message)}</p>
+            </div>
+        `;
 
     }
 
 }
+
+
+// ==========================================
+// CAMPOS DO MODAL
+// ==========================================
+
+function camposEvolucao(registro = {}) {
+
+    return [
+        {
+            nome: "exercicio_id",
+            rotulo: "Exercício",
+            tipo: "select",
+            obrigatorio: true,
+            valor: registro.exercicio_id ?? filtroExercicio.value,
+            opcoes: exercicios.map(e => ({
+                valor: e.id,
+                texto: `${e.nome} (${e.treino_nome})`
+            }))
+        },
+        {
+            linha: [
+                {
+                    nome: "peso",
+                    rotulo: "Carga (kg)",
+                    tipo: "number",
+                    obrigatorio: true,
+                    min: 0,
+                    max: 999.99,
+                    step: 0.25,
+                    placeholder: "Ex: 40",
+                    valor: registro.peso !== undefined ? Number(registro.peso) : ""
+                },
+                {
+                    nome: "data_registro",
+                    rotulo: "Data",
+                    tipo: "date",
+                    obrigatorio: true,
+                    max: dataHojeISO(),
+                    valor: registro.data_registro ?? dataHojeISO()
+                }
+            ]
+        },
+        {
+            nome: "observacao",
+            rotulo: "Observação",
+            tipo: "textarea",
+            maxlength: 300,
+            placeholder: "Ex: Última série até a falha",
+            valor: registro.observacao
+        }
+    ];
+}
+
+function converterValores(valores) {
+
+    return {
+        ...valores,
+        peso: Number(valores.peso),
+        exercicio_id: Number(valores.exercicio_id)
+    };
+}
+
+
+// ==========================================
+// CRIAR
+// ==========================================
 
 document
 .getElementById("novoRegistro")
 .addEventListener("click", async () => {
 
-    try {
+    if (exercicios.length === 0) {
 
-        const exercicio_id = prompt(
-            "ID do exercício:"
-        );
-
-        if (!exercicio_id) return;
-
-        const peso = prompt(
-            "Peso utilizado (kg):"
-        );
-
-        if (!peso) return;
-
-        const data_registro = prompt(
-            "Data (AAAA-MM-DD):"
-        );
-
-        if (!data_registro) return;
-
-        const observacao = prompt(
-            "Observação:"
-        );
-
-        await fetch(
-            "http://localhost:3000/evolucao",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type":
-                    "application/json"
-                },
-                body: JSON.stringify({
-
-                    peso: parseFloat(peso),
-                    data_registro,
-                    observacao,
-                    exercicio_id: parseInt(
-                        exercicio_id
-                    )
-
-                })
+        await confirmarAcao({
+            titulo: "Nenhum exercício ainda",
+            mensagem: "Para registrar uma carga você precisa ter pelo menos um exercício cadastrado.",
+            textoConfirmar: "Cadastrar exercício",
+            perigo: false,
+            aoConfirmar: async () => {
+                window.location.href = "exercicios.html";
             }
-        );
+        });
 
-        carregarEvolucao();
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao salvar evolução:",
-            erro
-        );
-
+        return;
     }
-    
+
+    await abrirFormulario({
+        titulo: "Novo Registro",
+        campos: camposEvolucao(),
+        textoConfirmar: "Registrar",
+        aoSalvar: async (valores) => {
+
+            await api("/evolucao", {
+                method: "POST",
+                body: converterValores(valores)
+            });
+
+            mostrarToast("Carga registrada!");
+            carregarEvolucao();
+        }
+    });
 
 });
-async function excluirEvolucao(id) {
 
-    const confirmar =
-        confirm("Deseja excluir este registro?");
 
-    if (!confirmar) return;
+// ==========================================
+// EDITAR (antes o botão não fazia nada)
+// ==========================================
 
-    try {
+async function editarEvolucao(id) {
 
-        await fetch(
-            `http://localhost:3000/evolucao/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
+    const registro = registros.find(r => r.id === id);
 
-        carregarEvolucao();
+    if (!registro) return;
 
-    } catch (erro) {
+    await abrirFormulario({
+        titulo: "Editar Registro",
+        campos: camposEvolucao(registro),
+        textoConfirmar: "Salvar alterações",
+        aoSalvar: async (valores) => {
 
-        console.error(
-            "Erro ao excluir evolução:",
-            erro
-        );
+            await api(`/evolucao/${id}`, {
+                method: "PUT",
+                body: converterValores(valores)
+            });
 
-    }
+            mostrarToast("Registro atualizado!");
+            carregarEvolucao();
+        }
+    });
 
 }
 
-carregarEvolucao();
+
+// ==========================================
+// EXCLUIR
+// ==========================================
+
+async function excluirEvolucao(id) {
+
+    const registro = registros.find(r => r.id === id);
+
+    if (!registro) return;
+
+    await confirmarAcao({
+        titulo: "Excluir registro?",
+        mensagem: `O registro de <strong>${Number(registro.peso).toLocaleString("pt-BR")} kg</strong>
+            em <strong>${escaparHTML(registro.exercicio_nome)}</strong>
+            do dia <strong>${formatarData(registro.data_registro)}</strong> será apagado.`,
+        textoConfirmar: "Sim, excluir",
+        aoConfirmar: async () => {
+
+            await api(`/evolucao/${id}`, {
+                method: "DELETE"
+            });
+
+            mostrarToast("Registro excluído.");
+            carregarEvolucao();
+        }
+    });
+
+}
+
+
+// ==========================================
+// INÍCIO
+// ==========================================
+
+carregarExercicios()
+    .then(carregarEvolucao)
+    .catch((erro) => {
+        listaEvolucao.innerHTML = `
+            <div class="sem-dados">
+                <h2>Erro ao carregar</h2>
+                <p>${escaparHTML(erro.message)}</p>
+            </div>
+        `;
+    });
 
 </script>
 

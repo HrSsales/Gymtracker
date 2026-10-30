@@ -5,98 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - GymTracker</title>
-
-</head>
-
-<body>
-    <div class="caixa">
-        <h1>Cadastro</h1>
-
-        <label>Nome</label>
-       <input type="text" id="nome">
-
-        <label>Email</label>
-        <input type="email" id="email">
-
-        <label>Senha</label>
-        <input type="password" id="senha">
-
-        <label>Confirmar Senha</label>
-        <input type="password" id="confirmarSenha">
-
-       <button onclick="cadastrar()">
-    Cadastrar
-</button>
-
-        <div class="links">
-            <button class="botao-secundario"
-                onclick="window.location.href='login.html'">
-                Já tenho conta
-            </button>
-
-            <button class="botao-secundario"
-                onclick="window.location.href='index.html'">
-                Voltar
-            </button>
-        </div>
-    </div>
-    <script>
-async function cadastrar() {
-
-    let nome = document.getElementById("nome").value;
-    let email = document.getElementById("email").value;
-    let senha = document.getElementById("senha").value;
-    let confirmarSenha = document.getElementById("confirmarSenha").value;
-
-    if (!nome || !email || !senha) {
-        alert("Preencha todos os campos.");
-        return;
-    }
-
-    if (senha !== confirmarSenha) {
-        alert("As senhas não coincidem!");
-        return;
-    }
-
-    try {
-
-        const resposta = await fetch(
-            "http://localhost:3000/usuarios",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    nome,
-                    email,
-                    senha
-                })
-            }
-        );
-
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-            alert(dados.erro || "Erro ao cadastrar.");
-            return;
-        }
-
-        alert("Cadastro realizado com sucesso!");
-
-        window.location.href = "login.html";
-
-    } catch (erro) {
-
-        console.error(erro);
-
-        alert(
-            "Não foi possível conectar com o servidor."
-        );
-    }
-}
-</script>
-
+    <link rel="stylesheet" href="css/ui.css">
 
     <style>
         * {
@@ -139,6 +48,10 @@ async function cadastrar() {
             color: white;
         }
 
+        input:focus {
+            outline: 2px solid #ff6b00;
+        }
+
         button {
             width: 100%;
             padding: 15px;
@@ -147,6 +60,16 @@ async function cadastrar() {
             background: #ff6b00;
             color: white;
             cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff7f26;
+            transition: 0.3s;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
         }
 
         .botao-secundario {
@@ -160,9 +83,18 @@ async function cadastrar() {
             cursor: pointer;
         }
 
-        button:hover {
-            background: #ff7f26;
-            transition: 0.3s;
+        .dica {
+            display: block;
+            margin: -14px 0 16px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .mensagem-erro {
+            min-height: 20px;
+            margin: -8px 0 12px;
+            color: #ff8a80;
+            font-size: 14px;
         }
 
         .links {
@@ -172,32 +104,126 @@ async function cadastrar() {
             margin-top: 20px;
         }
 
-        .create-btn {
+        @media (max-width: 500px) {
+            .caixa {
+                width: calc(100% - 32px);
+                padding: 30px 22px;
+            }
 
-    background: #ff6b00;
-
-    color: white;
-
-    border: none;
-
-    border-radius: 30px;
-
-    padding: 15px 35px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    transition: 0.3s;
-
-}
-
-.create-btn:hover {
-
-    transform: scale(1.05);
-
-}
+            .links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
+</head>
+
+<body>
+    <div class="caixa">
+        <h1>Cadastro</h1>
+
+        <form id="formCadastro" novalidate>
+
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" maxlength="100" autocomplete="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" maxlength="150" autocomplete="email" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" minlength="6" maxlength="72" autocomplete="new-password" required>
+            <small class="dica">Mínimo de 6 caracteres</small>
+
+            <label for="confirmarSenha">Confirmar Senha</label>
+            <input type="password" id="confirmarSenha" autocomplete="new-password" required>
+
+            <p class="mensagem-erro" id="mensagemErro" role="alert"></p>
+
+            <button type="submit" id="botaoCadastrar">
+                Cadastrar
+            </button>
+
+        </form>
+
+        <div class="links">
+            <button class="botao-secundario"
+                onclick="window.location.href='login.html'">
+                Já tenho conta
+            </button>
+
+            <button class="botao-secundario"
+                onclick="window.location.href='index.html'">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script>
+
+const formCadastro = document.getElementById("formCadastro");
+const mensagemErro = document.getElementById("mensagemErro");
+const botaoCadastrar = document.getElementById("botaoCadastrar");
+
+formCadastro.addEventListener("submit", cadastrar);
+
+async function cadastrar(evento) {
+
+    evento.preventDefault();
+
+    const nome = document.getElementById("nome").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+    const confirmarSenha = document.getElementById("confirmarSenha").value;
+
+    mensagemErro.textContent = "";
+
+    if (!nome || !email || !senha) {
+        mensagemErro.textContent = "Preencha todos os campos.";
+        return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        mensagemErro.textContent = "Digite um email válido.";
+        return;
+    }
+
+    if (senha.length < 6) {
+        mensagemErro.textContent = "A senha deve ter pelo menos 6 caracteres.";
+        return;
+    }
+
+    if (senha !== confirmarSenha) {
+        mensagemErro.textContent = "As senhas não coincidem!";
+        return;
+    }
+
+    botaoCadastrar.disabled = true;
+    botaoCadastrar.textContent = "Cadastrando...";
+
+    try {
+
+        await api("/usuarios", {
+            method: "POST",
+            body: { nome, email, senha }
+        });
+
+        mostrarToast("Cadastro realizado com sucesso! Faça login.");
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1200);
+
+    } catch (erro) {
+
+        mensagemErro.textContent = erro.message;
+
+        botaoCadastrar.disabled = false;
+        botaoCadastrar.textContent = "Cadastrar";
+    }
+}
+</script>
 </body>
 
 </html>

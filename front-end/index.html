@@ -5,120 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GymTracker</title>
-</head>
-
-<body>
-
-<nav>
-
-    <a href="index.html" class="logo">
-        GYMTRACKER
-    </a>
-
-    <div class="menu-navegacao">
-
-        <button class="botao-menu"
-            onclick="document.querySelector('.area-cards').scrollIntoView({ behavior: 'smooth' })">
-            Recursos
-        </button>
-
-        <button class="botao-menu">
-            Sobre-nos
-        </button>
-
-    </div>
-
-    <div class="area-login">
-
-        <button class="botao-login"
-            onclick="window.location.href='login.html'">
-            Login
-        </button>
-
-        <button class="botao-cadastro"
-            onclick="window.location.href='cadastro.html'">
-            Cadastro
-        </button>
-
-    </div>
-
-</nav>
-
-    <section class="pagina-inicial">
-
-        <h1 class="titulo-principal">
-            Evolua com o <span>GymTracker</span>
-        </h1>
-
-        <p class="texto-principal">
-            Organize seus treinos, registre cargas, acompanhe sua evolução e tenha total controle da sua jornada fitness em uma única plataforma.
-        </p>
-
-        <button class="botao-comecar"
-            onclick="window.location.href='login.html'">
-            Começar Agora
-        </button>
-
-    </section>
-
-    <section class="area-cards">
-
-        <div class="cards">
-
-            <div class="card">
-
-                <h2>📋 Treinos</h2>
-
-                <p class="resumo">
-                    Organize seus treinos.
-                </p>
-
-                <div class="detalhes">
-                    Crie fichas personalizadas para diferentes grupos musculares,
-                    monte divisões ABC, Upper/Lower ou Push Pull Legs e mantenha
-                    toda sua rotina de treinamento organizada em um só lugar.
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <h2>🏋 Exercícios</h2>
-
-                <p class="resumo">
-                    Sua ficha fácil e rápida.
-                </p>
-
-                <div class="detalhes">
-                    Cadastre exercícios com séries, repetições e observações.
-                    Mantenha uma biblioteca personalizada para criar treinos
-                    completos de forma rápida e intuitiva.
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <h2>📈 Evolução</h2>
-
-                <p class="resumo">
-                    Acompanhe sua evolução.
-                </p>
-
-                <div class="detalhes">
-                    Registre cargas, acompanhe seu histórico de treinos e visualize
-                    sua evolução física ao longo do tempo para alcançar seus objetivos.
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <footer>
-        GymTracker © 2026
-    </footer>
+    <link rel="stylesheet" href="css/ui.css">
 
     <style>
 
@@ -415,8 +302,209 @@
             color: #888;
         }
 
-    </style>
 
+        /* =========================
+           RESPONSIVO
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            nav {
+                position: sticky;
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .menu-navegacao,
+            .area-login {
+                justify-self: center;
+            }
+
+            .pagina-inicial {
+                min-height: auto;
+                padding: 80px 20px 160px;
+            }
+
+            .titulo-principal {
+                font-size: 44px;
+            }
+
+            .texto-principal {
+                font-size: 18px;
+            }
+
+            .area-cards {
+                padding: 0 16px 60px;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .detalhes {
+                max-height: none;
+                opacity: 1;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+
+    <a href="index.html" class="logo">
+        GYMTRACKER
+    </a>
+
+    <div class="menu-navegacao">
+
+        <button class="botao-menu"
+            onclick="document.querySelector('.area-cards').scrollIntoView({ behavior: 'smooth' })">
+            Recursos
+        </button>
+
+        <button class="botao-menu" onclick="abrirSobre()">
+            Sobre nós
+        </button>
+
+    </div>
+
+    <div class="area-login">
+
+        <button class="botao-login"
+            onclick="window.location.href='login.html'">
+            Login
+        </button>
+
+        <button class="botao-cadastro"
+            onclick="window.location.href='cadastro.html'">
+            Cadastro
+        </button>
+
+    </div>
+
+</nav>
+
+    <section class="pagina-inicial">
+
+        <h1 class="titulo-principal">
+            Evolua com o <span>GymTracker</span>
+        </h1>
+
+        <p class="texto-principal">
+            Organize seus treinos, registre cargas, acompanhe sua evolução e tenha total controle da sua jornada fitness em uma única plataforma.
+        </p>
+
+        <button class="botao-comecar"
+            onclick="window.location.href='login.html'">
+            Começar Agora
+        </button>
+
+    </section>
+
+    <section class="area-cards">
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h2>📋 Treinos</h2>
+
+                <p class="resumo">
+                    Organize seus treinos.
+                </p>
+
+                <div class="detalhes">
+                    Crie fichas personalizadas para diferentes grupos musculares,
+                    monte divisões ABC, Upper/Lower ou Push Pull Legs e mantenha
+                    toda sua rotina de treinamento organizada em um só lugar.
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h2>🏋 Exercícios</h2>
+
+                <p class="resumo">
+                    Sua ficha fácil e rápida.
+                </p>
+
+                <div class="detalhes">
+                    Cadastre exercícios com séries, repetições e observações.
+                    Mantenha uma biblioteca personalizada para criar treinos
+                    completos de forma rápida e intuitiva.
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h2>📈 Evolução</h2>
+
+                <p class="resumo">
+                    Acompanhe sua evolução.
+                </p>
+
+                <div class="detalhes">
+                    Registre cargas, acompanhe seu histórico de treinos e visualize
+                    sua evolução física ao longo do tempo para alcançar seus objetivos.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+        GymTracker © 2026
+    </footer>
+
+
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script>
+
+// Se já está logado, os botões levam direto ao painel
+if (getToken()) {
+
+    document.querySelector(".area-login").innerHTML = `
+        <button class="botao-cadastro"
+            onclick="window.location.href='dashboard.html'">
+            Ir para o painel
+        </button>
+    `;
+
+    document.querySelector(".botao-comecar").onclick = () => {
+        window.location.href = "dashboard.html";
+    };
+}
+
+function abrirSobre() {
+
+    confirmarAcao({
+        titulo: "Sobre o GymTracker",
+        mensagem: `O <strong>GymTracker</strong> é um projeto acadêmico criado para ajudar
+            quem treina a organizar suas fichas, cadastrar exercícios e
+            acompanhar a evolução das cargas ao longo do tempo.
+            <br><br>
+            Tudo fica salvo na sua conta, protegido por login.`,
+        textoConfirmar: "Criar minha conta",
+        perigo: false,
+        aoConfirmar: async () => {
+            window.location.href = "cadastro.html";
+        }
+    });
+}
+
+</script>
 </body>
 
 </html>

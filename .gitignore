@@ -1,0 +1,13 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (senhas e chaves NUNCA vão pro GitHub)
+.env
+
+# Logs e cobertura de testes
+*.log
+coverage/
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -6,116 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - GymTracker</title>
 
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/ui.css">
+
     <style>
         /* =========================
-           GERAL
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
-
-        body {
-            background: #121212;
-            color: white;
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            background: #121212;
-            height: 100px;
-            border-bottom: 2px solid #ff6b00;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
-        }
-
-        .logo {
-            position: relative;
-            color: #ff6b00;
-            text-decoration: none;
-            font-size: 34px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            animation: respirar 3s infinite ease-in-out;
-            transition: .3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        @keyframes respirar {
-            0% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-
-            50% {
-                text-shadow: 0 0 20px rgba(255, 107, 0, .8);
-            }
-
-            100% {
-                text-shadow: 0 0 5px rgba(255, 107, 0, .3);
-            }
-        }
-
-        nav {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-        }
-
-        .menu-btn {
-            background: #1d1d1d;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 15px;
-        }
-
-        .menu-btn:hover {
-            background: #2b2b2b;
-            transform: translateY(-2px);
-        }
-
-        .perfil-btn {
-            background: #ff6b00;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: .3s;
-            font-size: 15px;
-        }
-
-        .perfil-btn:hover {
-            background: #ff7f26;
-            transform: translateY(-2px);
-        }
-
-        /* =========================
-           CONTEÚDO
+           CONTEÚDO DO DASHBOARD
         ========================= */
 
         main {
             text-align: center;
-            padding: 100px 20px;
         }
 
         h1 {
@@ -129,10 +29,45 @@
 
         .subtitulo {
             max-width: 1000px;
-            margin: 0 auto 80px auto;
+            margin: 0 auto 50px auto;
             font-size: 30px;
             line-height: 1.6;
             color: #d6d6d6;
+        }
+
+        /* =========================
+           RESUMO (NÚMEROS)
+        ========================= */
+
+        .resumo-numeros {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 70px;
+        }
+
+        .numero {
+            min-width: 180px;
+            background: #1d1d1d;
+            border-radius: 20px;
+            padding: 20px 25px;
+            border: 2px solid transparent;
+            transition: .3s;
+        }
+
+        .numero:hover {
+            border-color: #ff6b00;
+        }
+
+        .numero strong {
+            display: block;
+            font-size: 36px;
+            color: #ff6b00;
+        }
+
+        .numero span {
+            color: #c7c7c7;
         }
 
         /* =========================
@@ -184,7 +119,8 @@
             transition: all 0.4s ease;
         }
 
-        .card:hover {
+        .card:hover,
+        .card:focus-visible {
             transform: translateY(-8px);
             border-color: #ff6b00;
             background: #252525;
@@ -193,24 +129,11 @@
                 0 0 40px rgba(255, 107, 0, 0.1);
         }
 
-        .card:hover .detalhes {
+        .card:hover .detalhes,
+        .card:focus-visible .detalhes {
             max-height: 250px;
             opacity: 1;
             margin-top: 15px;
-        }
-
-        @media (max-width: 1200px) {
-            nav {
-                position: static;
-                transform: none;
-            }
-
-            header {
-                flex-direction: column;
-                gap: 15px;
-                height: auto;
-                padding: 20px;
-            }
         }
 
         @media (max-width: 768px) {
@@ -223,17 +146,18 @@
                 font-size: 20px;
             }
 
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
             .card {
                 width: 100%;
                 max-width: 400px;
             }
-        }
 
+            /* No celular não existe hover: mostra os detalhes direto */
+            .detalhes {
+                max-height: none;
+                opacity: 1;
+                margin-top: 15px;
+            }
+        }
     </style>
 </head>
 
@@ -265,7 +189,7 @@
         <button class="perfil-btn"
             onclick="window.location.href='perfil.html'">
 
-            👤 <span id="boasVindas"></span>
+            👤 <span id="boasVindas">Perfil</span>
 
         </button>
 
@@ -282,9 +206,28 @@
             e tenha total controle da sua jornada fitness em uma única plataforma.
         </p>
 
+        <div class="resumo-numeros">
+
+            <div class="numero">
+                <strong id="qtdTreinos">–</strong>
+                <span>treinos</span>
+            </div>
+
+            <div class="numero">
+                <strong id="qtdExercicios">–</strong>
+                <span>exercícios</span>
+            </div>
+
+            <div class="numero">
+                <strong id="qtdEvolucoes">–</strong>
+                <span>registros de carga</span>
+            </div>
+
+        </div>
+
         <div class="cards">
 
-            <div class="card"
+            <div class="card" tabindex="0" role="link"
                 onclick="window.location.href='treinos.html'">
 
                 <h2>📋 Treinos</h2>
@@ -301,7 +244,7 @@
 
             </div>
 
-            <div class="card"
+            <div class="card" tabindex="0" role="link"
                 onclick="window.location.href='exercicios.html'">
 
                 <h2>🏋 Exercícios</h2>
@@ -317,7 +260,7 @@
 
             </div>
 
-            <div class="card"
+            <div class="card" tabindex="0" role="link"
                 onclick="window.location.href='evolucao.html'">
 
                 <h2>📈 Evolução</h2>
@@ -327,3 +270,51 @@
                 </p>
 
                 <div class="detalhes">
+                    Registre as cargas de cada exercício e veja quanto
+                    você progrediu desde o último treino.
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script>
+
+exigirLogin();
+mostrarNomeUsuario();
+
+// Enter no card funciona como clique (acessibilidade)
+document.querySelectorAll(".card").forEach((card) => {
+    card.addEventListener("keydown", (evento) => {
+        if (evento.key === "Enter") card.click();
+    });
+});
+
+async function carregarResumo() {
+
+    try {
+
+        const stats = await api("/stats");
+
+        document.getElementById("qtdTreinos").textContent = stats.treinos;
+        document.getElementById("qtdExercicios").textContent = stats.exercicios;
+        document.getElementById("qtdEvolucoes").textContent = stats.evolucoes;
+
+    } catch (erro) {
+
+        mostrarToast(erro.message, "erro");
+
+    }
+}
+
+carregarResumo();
+
+</script>
+
+</body>
+
+</html>

@@ -5,6 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Treinos - GymTracker</title>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/ui.css">
+
+    <style>
+        .ver-exercicios {
+            align-self: flex-start;
+            margin-top: 18px;
+            color: #ff9d57;
+            text-decoration: none;
+            font-size: 15px;
+            transition: .3s;
+        }
+
+        .ver-exercicios:hover {
+            color: #ff6b00;
+            transform: translateX(4px);
+        }
+    </style>
 </head>
 
 <body>
@@ -17,7 +36,7 @@
 
         <nav>
 
-            <button class="menu-btn"
+            <button class="menu-btn ativo"
                 onclick="window.location.href='treinos.html'">
                 Treinos
             </button>
@@ -37,7 +56,7 @@
         <button class="perfil-btn"
             onclick="window.location.href='perfil.html'">
 
-            👤 Perfil
+            👤 <span id="boasVindas">Perfil</span>
 
         </button>
 
@@ -69,13 +88,21 @@
             id="treinosGrid"
             class="treinos-grid">
 
+            <p class="carregando">Carregando treinos...</p>
+
         </div>
 
     </main>
 
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
 <script>
 
-const API_URL = "http://localhost:3000/treinos";
+exigirLogin();
+mostrarNomeUsuario();
+
+// Guarda a lista para usar nos modais (sem passar texto no onclick)
+let treinos = [];
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -84,359 +111,173 @@ document.addEventListener(
 
 async function carregarTreinos() {
 
-    const usuarioId =
-        localStorage.getItem("usuarioId");
-
-    if (!usuarioId) {
-        return;
-    }
+    const grid =
+        document.getElementById(
+            "treinosGrid"
+        );
 
     try {
 
-        const resposta =
-            await fetch(
-                `${API_URL}/${usuarioId}`
-            );
-
-        const treinos =
-            await resposta.json();
-
-        const grid =
-            document.getElementById(
-                "treinosGrid"
-            );
-
-        grid.innerHTML = "";
+        treinos = await api("/treinos");
 
         if (treinos.length === 0) {
 
-            grid.innerHTML =
-                "<p class='sem-dados'>Nenhum treino cadastrado.</p>";
+            grid.innerHTML = `
+                <div class="sem-dados">
+                    <h2>Nenhum treino cadastrado</h2>
+                    <p>Clique em "+ Novo Treino" para criar sua primeira ficha.</p>
+                </div>
+            `;
 
             return;
         }
 
-        treinos.forEach(treino => {
+        grid.innerHTML = treinos.map(treino => `
+            <div class="treino-card">
 
-            grid.innerHTML += `
-                <div class="treino-card">
+                <span class="etiqueta">
+                    ${treino.total_exercicios}
+                    ${treino.total_exercicios === 1 ? "exercício" : "exercícios"}
+                </span>
 
-                    <h3>${treino.nome}</h3>
+                <h2>${escaparHTML(treino.nome)}</h2>
 
-                    <p>
-                        ${treino.descricao || "Sem descrição"}
-                    </p>
+                <p>
+                    ${escaparHTML(treino.descricao) || "Sem descrição"}
+                </p>
 
-                    <div class="acoes">
+                <a class="ver-exercicios"
+                    href="exercicios.html?treino=${treino.id}">
+                    Ver exercícios →
+                </a>
 
-                        <button
-                            class="btn-editar"
-                            onclick="editarTreino(${treino.id})">
-                            Editar
-                        </button>
+                <div class="acoes">
 
-                        <button
-                            class="btn-excluir"
-                            onclick="excluirTreino(${treino.id})">
-                            Excluir
-                        </button>
+                    <button
+                        class="btn-editar"
+                        onclick="editarTreino(${treino.id})">
+                        Editar
+                    </button>
 
-                    </div>
+                    <button
+                        class="btn-excluir"
+                        onclick="excluirTreino(${treino.id})">
+                        Excluir
+                    </button>
 
                 </div>
-            `;
-        });
+
+            </div>
+        `).join("");
 
     } catch (erro) {
 
-        console.error(erro);
+        grid.innerHTML = `
+            <div class="sem-dados">
+                <h2>Erro ao carregar</h2>
+                <p>${escaparHTML(erro.message)}</p>
+            </div>
+        `;
 
     }
 
 }
 
+function camposTreino(treino = {}) {
+
+    return [
+        {
+            nome: "nome",
+            rotulo: "Nome do treino",
+            obrigatorio: true,
+            maxlength: 100,
+            placeholder: "Ex: Treino A - Peito e Tríceps",
+            valor: treino.nome
+        },
+        {
+            nome: "descricao",
+            rotulo: "Descrição",
+            tipo: "textarea",
+            maxlength: 500,
+            placeholder: "Ex: Segunda e quinta, foco em hipertrofia",
+            valor: treino.descricao
+        }
+    ];
+}
+
 async function novoTreino() {
 
-    const nome =
-        prompt("Nome do treino:");
+    await abrirFormulario({
+        titulo: "Novo Treino",
+        campos: camposTreino(),
+        textoConfirmar: "Criar treino",
+        aoSalvar: async (valores) => {
 
-    if (!nome) return;
-
-    const descricao =
-        prompt("Descrição do treino:");
-
-    const usuario_id =
-        localStorage.getItem("usuarioId");
-
-    try {
-
-        await fetch(
-            API_URL,
-            {
+            await api("/treinos", {
                 method: "POST",
+                body: valores
+            });
 
-                headers: {
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body: JSON.stringify({
-                    nome,
-                    descricao,
-                    usuario_id
-                })
-            }
-        );
-
-        carregarTreinos();
-
-    } catch (erro) {
-
-        console.error(erro);
-
-    }
+            mostrarToast("Treino criado com sucesso!");
+            carregarTreinos();
+        }
+    });
 
 }
 
 async function editarTreino(id) {
 
-    const nome =
-        prompt("Novo nome:");
+    const treino = treinos.find(t => t.id === id);
 
-    if (!nome) return;
+    if (!treino) return;
 
-    const descricao =
-        prompt("Nova descrição:");
+    await abrirFormulario({
+        titulo: "Editar Treino",
+        campos: camposTreino(treino),
+        textoConfirmar: "Salvar alterações",
+        aoSalvar: async (valores) => {
 
-    try {
-
-        await fetch(
-            `${API_URL}/${id}`,
-            {
+            await api(`/treinos/${id}`, {
                 method: "PUT",
+                body: valores
+            });
 
-                headers: {
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body: JSON.stringify({
-                    nome,
-                    descricao
-                })
-            }
-        );
-
-        carregarTreinos();
-
-    } catch (erro) {
-
-        console.error(erro);
-
-    }
+            mostrarToast("Treino atualizado!");
+            carregarTreinos();
+        }
+    });
 
 }
 
 async function excluirTreino(id) {
 
-    const confirmar =
-        confirm(
-            "Deseja excluir este treino?"
-        );
+    const treino = treinos.find(t => t.id === id);
 
-    if (!confirmar) return;
+    if (!treino) return;
 
-    try {
+    const aviso = treino.total_exercicios > 0
+        ? `<br><br>Os <strong>${treino.total_exercicios} exercícios</strong> deste treino e todos os registros de evolução deles também serão apagados.`
+        : "";
 
-        await fetch(
-            `${API_URL}/${id}`,
-            {
+    await confirmarAcao({
+        titulo: "Excluir treino?",
+        mensagem: `Você está prestes a excluir <strong>${escaparHTML(treino.nome)}</strong>.${aviso}<br><br>Essa ação não pode ser desfeita.`,
+        textoConfirmar: "Sim, excluir",
+        aoConfirmar: async () => {
+
+            await api(`/treinos/${id}`, {
                 method: "DELETE"
-            }
-        );
+            });
 
-        carregarTreinos();
-
-    } catch (erro) {
-
-        console.error(erro);
-
-    }
+            mostrarToast("Treino excluído.");
+            carregarTreinos();
+        }
+    });
 
 }
 
 </script>
 
-
 </body>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI",sans-serif;
-}
-
-body{
-    background:#121212;
-    color:white;
-}
-
-header{
-    position:sticky;
-    top:0;
-    z-index:999;
-
-    background:#121212;
-
-    height:100px;
-
-    border-bottom:2px solid #ff6b00;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:0 50px;
-}
-
-.logo{
-    text-decoration:none;
-    color:#ff6b00;
-    font-size:34px;
-    font-weight:bold;
-}
-
-nav{
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    display:flex;
-    gap:15px;
-}
-
-.menu-btn{
-    background:#1d1d1d;
-    color:white;
-    border:none;
-    border-radius:30px;
-    padding:15px 25px;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.menu-btn:hover{
-    color:#ff6b00;
-}
-
-.perfil-btn{
-    background:#ff6b00;
-    color:white;
-    border:none;
-    border-radius:30px;
-    padding:15px 25px;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.create-btn{
-    background:#ff6b00;
-    color:white;
-    border:none;
-    border-radius:30px;
-    padding:15px 30px;
-    cursor:pointer;
-}
-
-main{
-    max-width:1400px;
-    margin:auto;
-    padding:60px 20px;
-}
-
-.page-title{
-    text-align:center;
-    font-size:58px;
-}
-
-.page-title span{
-    color:#ff6b00;
-}
-
-.descricao{
-    text-align:center;
-    color:#cfcfcf;
-    margin:20px auto 50px;
-}
-
-.actions{
-    display:flex;
-    justify-content:center;
-    margin-bottom:40px;
-}
-
-.treinos-grid{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:25px;
-}
-
-.treino-card{
-    width:350px;
-    background:#1d1d1d;
-    padding:25px;
-    border-radius:20px;
-    transition:.3s;
-}
-
-.treino-card:hover{
-    border:1px solid #ff6b00;
-}
-
-.treino-card h3{
-    color:#ff6b00;
-    margin-bottom:10px;
-}
-
-.treino-card p{
-    color:#d6d6d6;
-}
-
-.acoes{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
-}
-
-.btn-editar{
-    flex:1;
-    background:#ff6b00;
-    color:white;
-    border:none;
-    border-radius:20px;
-    padding:10px;
-    cursor:pointer;
-}
-
-.btn-excluir{
-    flex:1;
-    background:#c62828;
-    color:white;
-    border:none;
-    border-radius:20px;
-    padding:10px;
-    cursor:pointer;
-}
-
-.sem-dados{
-    color:#888;
-    text-align:center;
-    width:100%;
-}
-
-</style>
 
 </html>

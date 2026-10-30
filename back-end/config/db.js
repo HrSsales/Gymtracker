@@ -9,4 +9,8 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
 });
 
+pool.on("error", (erro) => {
+    console.error("Erro inesperado na conexão com o banco:", erro);
+});
+
 module.exports = pool;

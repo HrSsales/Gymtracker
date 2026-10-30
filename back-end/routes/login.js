@@ -1,17 +1,32 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const pool = require("../config/db");
+const { gerarToken } = require("../middleware/auth");
+const { validarLogin } = require("../utils/validacoes");
 
 const router = express.Router();
+
+/* ==================================
+   LOGIN (DEVOLVE O TOKEN JWT)
+================================== */
 
 router.post("/", async (req, res) => {
 
     try {
 
-        const { email, senha } = req.body;
+        const erroValidacao = validarLogin(req.body);
+
+        if (erroValidacao) {
+            return res.status(400).json({
+                erro: erroValidacao
+            });
+        }
+
+        const email = req.body.email.trim().toLowerCase();
+        const { senha } = req.body;
 
         const resultado = await pool.query(
-            "SELECT * FROM usuarios WHERE email = $1",
+            "SELECT id, nome, email, senha FROM usuarios WHERE email = $1",
             [email]
         );
 
@@ -34,8 +49,11 @@ router.post("/", async (req, res) => {
             });
         }
 
+        const token = gerarToken(usuario);
+
         res.status(200).json({
             sucesso: true,
+            token,
             usuario: {
                 id: usuario.id,
                 nome: usuario.nome,

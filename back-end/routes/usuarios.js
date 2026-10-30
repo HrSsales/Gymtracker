@@ -1,28 +1,37 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const pool = require("../config/db");
+const { validarCadastroUsuario } = require("../utils/validacoes");
 
 const router = express.Router();
+
+/* ==================================
+   CADASTRAR USUÁRIO
+================================== */
 
 router.post("/", async (req, res) => {
 
     try {
 
-        const { nome, email, senha } = req.body;
+        const erroValidacao = validarCadastroUsuario(req.body);
 
-        if (!nome || !email || !senha) {
+        if (erroValidacao) {
             return res.status(400).json({
-                erro: "Todos os campos são obrigatórios"
+                erro: erroValidacao
             });
         }
 
+        const nome = req.body.nome.trim();
+        const email = req.body.email.trim().toLowerCase();
+        const { senha } = req.body;
+
         const usuarioExistente = await pool.query(
-            "SELECT * FROM usuarios WHERE email = $1",
+            "SELECT id FROM usuarios WHERE email = $1",
             [email]
         );
 
         if (usuarioExistente.rows.length > 0) {
-            return res.status(400).json({
+            return res.status(409).json({
                 erro: "Email já cadastrado"
             });
         }

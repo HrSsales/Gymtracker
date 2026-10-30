@@ -1,17 +1,56 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../config/db");
+const {
+    validarExercicio,
+    validarId,
+    GRUPOS_MUSCULARES
+} = require("../utils/validacoes");
+
+
+// ==========================================
+// FUNÇÃO AUXILIAR
+// Confere se o treino pertence ao usuário
+// ==========================================
+
+async function treinoDoUsuario(treinoId, usuarioId) {
+
+    const resultado = await pool.query(
+        "SELECT id FROM treinos WHERE id = $1 AND usuario_id = $2",
+        [treinoId, usuarioId]
+    );
+
+    return resultado.rows.length > 0;
+}
+
+
+// ==========================================
+// GRUPOS MUSCULARES ACEITOS
+// ==========================================
+
+router.get("/grupos", (req, res) => {
+
+    res.json(GRUPOS_MUSCULARES);
+
+});
 
 
 // ==========================================
 // LISTAR EXERCÍCIOS
+// Opcional: ?treino_id=1 para filtrar
 // ==========================================
 
-router.get("/:usuarioId", async (req, res) => {
+router.get("/", async (req, res) => {
 
     try {
 
-        const { usuarioId } = req.params;
+        const { treino_id } = req.query;
+
+        if (treino_id && validarId(treino_id)) {
+            return res.status(400).json({
+                erro: "Treino inválido"
+            });
+        }
 
         const resultado = await pool.query(
             `
@@ -30,10 +69,11 @@ router.get("/:usuarioId", async (req, res) => {
             ON e.treino_id = t.id
 
             WHERE t.usuario_id = $1
+            AND ($2::int IS NULL OR e.treino_id = $2::int)
 
             ORDER BY e.id DESC
             `,
-            [usuarioId]
+            [req.usuario.id, treino_id || null]
         );
 
         res.json(resultado.rows);
@@ -59,26 +99,30 @@ router.post("/", async (req, res) => {
 
     try {
 
+        const erroValidacao = validarExercicio(req.body);
+
+        if (erroValidacao) {
+
+            return res.status(400).json({
+                erro: erroValidacao
+            });
+
+        }
+
         const {
-            nome,
             grupo_muscular,
             series,
             repeticoes,
             treino_id
         } = req.body;
 
-        if (
-            !nome ||
-            !grupo_muscular ||
-            !series ||
-            !repeticoes ||
-            !treino_id
-        ) {
+        const nome = req.body.nome.trim();
 
-            return res.status(400).json({
-                erro: "Todos os campos são obrigatórios"
+        // Não deixa cadastrar exercício no treino de outra pessoa
+        if (!(await treinoDoUsuario(treino_id, req.usuario.id))) {
+            return res.status(404).json({
+                erro: "Treino não encontrado"
             });
-
         }
 
         const resultado = await pool.query(
@@ -137,32 +181,63 @@ router.put("/:id", async (req, res) => {
 
         const { id } = req.params;
 
+        const erroValidacao =
+            validarId(id) ||
+            validarExercicio(req.body);
+
+        if (erroValidacao) {
+            return res.status(400).json({
+                erro: erroValidacao
+            });
+        }
+
         const {
-            nome,
             grupo_muscular,
             series,
-            repeticoes
+            repeticoes,
+            treino_id
         } = req.body;
 
+        const nome = req.body.nome.trim();
+
+        if (!(await treinoDoUsuario(treino_id, req.usuario.id))) {
+            return res.status(404).json({
+                erro: "Treino não encontrado"
+            });
+        }
+
+        // Só atualiza se o exercício for de um treino do usuário
         const resultado = await pool.query(
             `
-            UPDATE exercicios
+            UPDATE exercicios e
             SET
                 nome = $1,
                 grupo_muscular = $2,
                 series = $3,
-                repeticoes = $4
-            WHERE id = $5
-            RETURNING *
+                repeticoes = $4,
+                treino_id = $5
+            FROM treinos t
+            WHERE e.id = $6
+            AND e.treino_id = t.id
+            AND t.usuario_id = $7
+            RETURNING e.*
             `,
             [
                 nome,
                 grupo_muscular,
                 series,
                 repeticoes,
-                id
+                treino_id,
+                id,
+                req.usuario.id
             ]
         );
+
+        if (resultado.rows.length === 0) {
+            return res.status(404).json({
+                erro: "Exercício não encontrado"
+            });
+        }
 
         res.json(resultado.rows[0]);
 
@@ -189,13 +264,31 @@ router.delete("/:id", async (req, res) => {
 
         const { id } = req.params;
 
-        await pool.query(
+        const erroId = validarId(id);
+
+        if (erroId) {
+            return res.status(400).json({
+                erro: erroId
+            });
+        }
+
+        const resultado = await pool.query(
             `
-            DELETE FROM exercicios
-            WHERE id = $1
+            DELETE FROM exercicios e
+            USING treinos t
+            WHERE e.id = $1
+            AND e.treino_id = t.id
+            AND t.usuario_id = $2
+            RETURNING e.id
             `,
-            [id]
+            [id, req.usuario.id]
         );
+
+        if (resultado.rows.length === 0) {
+            return res.status(404).json({
+                erro: "Exercício não encontrado"
+            });
+        }
 
         res.json({
             mensagem: "Exercício removido com sucesso"
